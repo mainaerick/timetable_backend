@@ -1,0 +1,23 @@
+{
+    "lessons": [
+        {
+            "id": "1",
+            "lname": "development studies",
+            "frag": "Monday",
+            "lect": "kandiri",
+            "room": "elh4",
+            "fromtime": "11:21 PM",
+            "totime": "12:12 AM"
+        },
+        {
+            "id": "2",
+            "lname": "development studies",
+            "frag": "Monday",
+            "lect": "kandiri",
+            "room": "elh4",
+            "fromtime": "12:11 PM",
+            "totime": "02:32 PM"
+        }
+    ],
+    "success": 1
+}

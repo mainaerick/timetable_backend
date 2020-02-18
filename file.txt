@@ -1,0 +1,13 @@
+Starting ngrok from the command line
+When you host an ASP.NET application with Visual Studio, it usually uses IIS Express, but may use other web server software depending on what version of Visual Studio you are using and how you have your application configured. Regardless of the setup, there is one, easy command you need to run to create a new public tunnel to your app:
+
+ngrok http -host-header="localhost:[port]" [port]
+In order to know what port on which your app is running, run the app from Visual Studio. It will launch a web browser with your new app and you will see the URL in the address bar:
+
+Visual Studio Web App Port
+In this example, the port number is 58821, but you will find that Visual Studio assigns a random port number to each new ASP.NET project you create. Thankfully, it remains the same for the specific project you are working on.
+
+For this example, then, the ngrok command would be:
+
+ngrok http -host-header="localhost:58821" 58821
+ngrok will start, and you'll see your app's new public URL.
