@@ -39,7 +39,7 @@ $_SESSION['page'] = '../lecturers/lecturer.php';
 
             <div class="container page-content-wrapper" style="padding: 0%;  margin-top: 3%;">
 
-                <h3>ADD LECTURERS</h3>
+                <h3>Manage Lectures</h3>
 
 
 
@@ -49,11 +49,11 @@ $_SESSION['page'] = '../lecturers/lecturer.php';
                     <div class="col">
                         <!-- <button id="addlbtn" class=" btn btn-outline-primary btn-sm">Add Lesson</button> -->
                         <?php
-                        if (empty($_SESSION['lec_add_open'])) {
+                        if (empty($_SESSION['lecturer_add_open'])) {
                             // isset($_GET['addlesson']) || isset($_GET['edit']) ||
 
                         ?>
-                            <a id="addcbtn" href="../process/process.php?add_lecturer" type="hidden" class="btn btn-outline-primary btn-sm">Add a Lecturer</a>
+                            <a id="addcbtn" href="../process/process.php?addlecturer" type="hidden" class="btn btn-outline-primary btn-sm">Add a Lecturer</a>
 
                             <hr>
                         <?php }
@@ -70,7 +70,7 @@ $_SESSION['page'] = '../lecturers/lecturer.php';
                 <div class="row justify-content-center">
 
                     <?php
-                    if (!empty($_SESSION['course_add_open']) && $_SESSION['course_add_open']) {
+                    if (!empty($_SESSION['lecturer_add_open']) && $_SESSION['lecturer_add_open']) {
                         // isset($_GET['addlesson']) || isset($_GET['edit']) ||
 
                     ?>
@@ -103,7 +103,7 @@ $_SESSION['page'] = '../lecturers/lecturer.php';
 
 
                 <?php
-                if (!empty($_SESSION['lec_add_open']) && ($_SESSION['lec_add_open'])) {
+                if (!empty($_SESSION['lecturer_add_open']) && ($_SESSION['lecturer_add_open'])) {
                 } else {
                     include "view_lec.php";
                 }

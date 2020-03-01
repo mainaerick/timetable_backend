@@ -33,6 +33,8 @@
             </ul> -->
             <a href="../exams/exams.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Exam Timetables</a>
             <a href="../course/course.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Courses</a>
+            <a href="../lecturers/lecturer.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Lecturer</a>
+
             <a href="../feedback/feedback.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Feedbacks</a>
 
 

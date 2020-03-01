@@ -48,7 +48,7 @@ $_SESSION['page'] = '../room/room.php';
                             // isset($_GET['addlesson']) || isset($_GET['edit']) ||
 
                         ?>
-                            <a id="addrbtn" href="../process/process.php?add_room" type="hidden" class="btn btn-outline-primary btn-sm">Add Room</a>
+                            <a id="addrbtn" href="../process/process.php?addroom" type="hidden" class="btn btn-outline-primary btn-sm">Add Room</a>
 
                             <hr>
                         <?php }

@@ -35,6 +35,14 @@ $course_id = '';
 
 $editcoursename = '';
 $editcourseyears = '';
+
+
+$editlec_reg_no='';
+$editlecname='';
+$editlecemail='';
+
+$editroomname='';
+$editroomcapacity='';
 // click edit on exams
 
 // if (isset($_GET['examedit'])) {
@@ -591,11 +599,6 @@ if (isset($_POST['save_lesson'])) {
     }
     
     }
-
-
-
-
-    
 }
 // edit course
 if (isset($_GET['edit_course'])) {
@@ -619,7 +622,7 @@ if (isset($_POST['update_course'])) {
     $course_years= $_POST['course_years'];
     $dept = $_SESSION['ldep'];
 
-    $result = $db->query("select * from courses where course_name='$coursename'");
+    $result = $db->query("select * from courses where course_name=''");
 
     if ($result->num_rows) {
 
@@ -648,7 +651,7 @@ if (isset($_GET['delete_course'])) {
     // header("location: ../course/course.php?deleted");
 }
 
-// insert course
+// save course
 if (isset($_POST['save_course'])) {
 
     $coursename = $_POST['course_name'];
@@ -670,6 +673,120 @@ if (isset($_POST['save_course'])) {
     }
 }
 
+// edit lecturer
+if (isset($_GET['edit_lecturer'])) {
+    $update = true;
+    $id = $_GET['edit_lecturer'];
+    $_SESSION['lecturer_add_open'] = "opened";
+    $result = $db->query("select * from lecturer where id=$id") or die($db->error);
+    if ($result->num_rows == 1) {
+
+        $row = $result->fetch_array();
+
+        $editlec_reg_no = $row['reg_no'];
+        $editlecname = $row['name'];
+        $editlecemail = $row['email'];
+    }
+}
+
+// update lecturer
+if (isset($_POST['update_lecturer'])) {
+    $id = $_POST['lecturer_id'];
+    $lec_name = $_POST['lec_name'];
+    $lec_email = $_SESSION['lec_email'];
+    $lec_regno = $_POST['lec_reg_no'];
+    $department = $_SESSION['ldep_name'];
+
+    $result = $db->query("select * from lecturer where reg_no='$lec_regno'");
+
+    if ($result->num_rows) {
+
+        $_SESSION['lecturer_exist'] = "Lecurer already exists";
+        header("location: ../course/course.php");
+    } else {
+        $db->query("update lecturer set name='$lec_name',email='$lec_email',reg_no='$lec_regno' where id=$id;");
+        unset($_SESSION['lecturer_add_open']);
+        header("location: ../lecturers/lecturer.php?updated");
+    }
+}
+
+
+// save lecturer
+if (isset($_POST['save_lecturer'])) {
+
+    $lec_name = $_POST['lec_name'];
+    $lec_email = $_SESSION['lec_email'];
+    $lec_regno=$_POST['lec_reg_no'];
+    $department = $_SESSION['ldep_name'];
+
+    $result = $db->query("select * from lecturer where reg_no='$lec_regno'");
+
+    if ($result->num_rows) {
+
+        $_SESSION['lecturer_exist'] = "Lecurer already exists";
+        header("location: ../lecturers/lecturer.php");
+    } else {
+        $db->query("insert into lecturer values(null,
+        '$lec_name',
+        '1234','$lec_regno','$department');") or die($db->error);
+
+        header("location: ../lecturers/lecturer.php?saved");
+    }
+}
+
+
+// edit room
+if (isset($_GET['edit_room'])) {
+    $update = true;
+    $id = $_GET['edit_room'];
+    $_SESSION['room_add_open'] = "opened";
+    $result = $db->query("select * from room where id=$id") or die(mysqli_errorno());
+    if ($result->num_rows == 1) {
+
+        $row = $result->fetch_array();
+
+        $editroomname = $row['name'];
+        $editroomcapacity = $row['capacity'];
+    }
+}
+// update room
+if (isset($_POST['update_room'])) {
+    $id = $_POST['room_id'];
+    $room_name = $_POST['room_name'];
+    $room_capacity = $_POST['room_capacity'];
+    $result = $db->query("select * from room where name=''");
+    if ($result->num_rows) {
+
+        $_SESSION['room_exist'] = "Room already exists";
+        header("location: ../room/room.php");
+    }  else {
+        $db->query("update room set name='$room_name',capacity='$room_capacity' where id=$id;");
+        unset($_SESSION['room_add_open']);
+        header("location: ../room/room.php?updated");
+    }
+}
+// save room
+if (isset($_POST['save_room'])) {
+
+    $room_name = $_POST['room_name'];
+    $room_capacity = $_SESSION['room_capacity'];
+
+    $result = $db->query("select * from room where name='$room_name'");
+
+    if ($result->num_rows) {
+
+        $_SESSION['room_exist'] = "Room already exists";
+        header("location: ../room/room.php");
+    } else {
+        $db->query("insert into room values(null,
+        '$room_name',
+        '$room_capacity');") or die($db->error);
+
+        header("location: ../room/room.php?saved");
+    }
+}
+
+// save department
 if (isset($_POST['save_dep'])) {
 
     $new_dep_name = $_POST['department_name'];
@@ -824,6 +941,33 @@ if (isset($_GET['hide_exam_add'])) {
     header("location: $page");
 }
 
+// lecturer add form is hidden
+if (isset($_GET['hidelectureradd'])) {
+    unset($_SESSION['lecturer_add_open']);
+    $page = $_SESSION['page'];
+    header("location: $page");
+}
+
+// lecturer add form is shown
+if (isset($_GET['addlecturer'])) {
+    $_SESSION['lecturer_add_open'] = "opened"; //ensure input stays shown
+    $page = $_SESSION['page'];
+    header("location: $page");
+}
+
+// room add form is hidden
+if (isset($_GET['hideroomadd'])) {
+    unset($_SESSION['room_add_open']);
+    $page = $_SESSION['page'];
+    header("location: $page");
+}
+
+// room add form is shown
+if (isset($_GET['addroom'])) {
+    $_SESSION['room_add_open'] = "opened"; //ensure input stays shown
+    $page = $_SESSION['page'];
+    header("location: $page");
+}
 
 // course add form is shown
 if (isset($_GET['addcourse'])) {
@@ -831,6 +975,7 @@ if (isset($_GET['addcourse'])) {
     $page = $_SESSION['page'];
     header("location: $page");
 }
+
 if (isset($_GET['hidecourseadd'])) {
     unset($_SESSION['course_add_open']);
     $page = $_SESSION['page'];

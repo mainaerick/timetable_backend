@@ -44,7 +44,6 @@
 
             <div class="">
                 <div class="page-content-wrapper container" style="padding: 0%;  margin-top: 3%;">
-                    <h3>VIEW LECTURERS</h3>
                     <hr>
 
                     <div class="col">
@@ -89,7 +88,7 @@
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="../process/process.php?notify_lecturer">Notify</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="../process/process.php?edit_lecturer">Edit</a>
+                                                    <a class="dropdown-item" href="../lecturers/lecturer.php?edit_lecturer=<?echo $row['id']?>">Edit</a>
                                                     <a class="dropdown-item" href="../process/process.php?delete_lecturer">Delete</a>
                                                 </div>
                                             </td>

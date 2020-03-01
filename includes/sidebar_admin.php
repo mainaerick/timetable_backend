@@ -35,6 +35,7 @@
 
             </ul> -->
             <a href="../users/users.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Users</a>
+            <a href="../room/room.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Room</a>
 
         </div>
     </div>

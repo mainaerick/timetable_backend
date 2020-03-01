@@ -25,7 +25,7 @@
                 $ltablecourse = $_SESSION['lcourse'];
                 $lyear = $_SESSION['year'];
                 $lsemester = $_SESSION['semester'];
-                $datalist_lesson = $db->query("select * from lecturer where department='$dept';");
+                $datalist_lesson = $db->query("select * from room;");
                 if (!empty($datalist_lesson)) {
                     while ($row = $datalist_lesson->fetch_assoc()) {
             ?>
