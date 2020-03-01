@@ -32,7 +32,7 @@
                         ?>
 
 
-            <tr>
+            <tr class="tr_lavailable">
                 <td class="name_unit"><?php echo $row['lesson_name'];?></td>
                 <td class="code_unit"><?php echo $row['code'];?></td>
                 <td class="lec_unit"><?php echo $row['lecturer'];?></td>

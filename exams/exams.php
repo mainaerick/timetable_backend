@@ -79,7 +79,7 @@ $_SESSION['page'] = '../exams/exams.php';
               // isset($_GET['addexam']) || isset($_GET['editexam']) || isset($_GET['saved']) 
               {
               ?>
-                <a href="../process/process.php?addexam" class="btn btn-outline-primary btn-sm" style="">Add Exam</a>
+                <a href="../process/process.php?addexam" class="btn btn-outline-primary btn-sm">Add Exam</a>
               <?php } ?>
 
             </div>

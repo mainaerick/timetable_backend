@@ -46,10 +46,18 @@ $_SESSION['page'] = '../feedback/feedback.php';
                     <hr>
 
                     <div class="col">
+                        <form class="col form-inline justify-content-end" style="margin-bottom: 1%;">
+                            <input id="search_exam" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search timetables">
+                            <select class="custom-select my-2 my-sm-0" id="select_filter">
+                                <option selected>filter by</option>
+                                <option value="reg_no">reg-no</option>
+                                <option value="sent_date">sent date</option>
+                                <option value="res_date">resolved-date</option>
+                            </select>
+                        </form>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
                                     <th scope="col">Content</th>
                                     <th scope="col">Sender Reg. No.</th>
                                     <th scope="col">Sent date</th>
@@ -60,38 +68,37 @@ $_SESSION['page'] = '../feedback/feedback.php';
                             </thead>
                             <tbody>
                                 <?php
-              $feedback_query = $db->query("select * from feedback;");
-              if (!empty($feedback_query)) {
+                                $feedback_query = $db->query("select * from feedback;");
+                                if (!empty($feedback_query)) {
 
-                $i=1;
-                while ($row = $feedback_query->fetch_assoc()) {
-                    $i++;
-                  // echo $row['lesson_name'];
+                                    $i = 1;
+                                    while ($row = $feedback_query->fetch_assoc()) {
+                                        $i++;
+                                        // echo $row['lesson_name'];
 
-                  ?>
-                                <tr>
-                                    <th scope="row"><?php echo $i; ?></th>
-                                    <td><?php echo $row['content']; ?></td>
-                                    <td><?php echo $row['user_reg_no']; ?></td>
-                                    <td><?php echo $row['received_date']; ?></td>
-                                    <td><?php echo $row['reply_date']; ?></td>
-                                    
-                                    <td>
-                                        <button type="button" class="btn btn-info dropdown-toggle"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">Lesson TimeTable</a>
-                                            <a class="dropdown-item" href="#">Exams TimeTable</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Delete</a>
-                                        </div>
-                                    </td>
+                                ?>
+                                        <tr>
+                                            <td><?php echo $row['content']; ?></td>
+                                            <td><?php echo $row['user_reg_no']; ?></td>
+                                            <td><?php echo $row['received_date']; ?></td>
+                                            <td><?php echo $row['reply_date']; ?></td>
+
+                                            <td>
+                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Lesson TimeTable</a>
+                                                    <a class="dropdown-item" href="#">Exams TimeTable</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Delete</a>
+                                                </div>
+                                            </td>
 
 
-                                </tr>
-                <?php }} ?>
+                                        </tr>
+                                <?php }
+                                } ?>
                             </tbody>
                         </table>
 
@@ -113,6 +120,46 @@ $_SESSION['page'] = '../feedback/feedback.php';
                 </div>
             </div>
             <!-- /#page-content-wrapper -->
+
+
+            <script>
+                function myFunction() {
+                    // Declare variables
+                    var input, filter, table, tr, td, i, txtValue, selected_value;
+                    input = document.getElementById("search");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("user_table");
+                    tr = table.getElementsByTagName("tr");
+                    selected_value = document.getElementById("select_filter").value;
+                    // alert(selected_value);
+                    // Loop through all table rows, and hide those who don't match the search query
+                    for (i = 0; i < tr.length; i++) {
+                        if (selected_value == 'reg_no') {
+                            td = tr[i].getElementsByTagName("td")[1];
+
+                        } else if (selected_value == 'sent_date') {
+                            td = tr[i].getElementsByTagName("td")[2];
+
+                        } else if (selected_value == 'res_date') {
+                            td = tr[i].getElementsByTagName("td")[3];
+
+                        } else {
+                            td = tr[i].getElementsByTagName("td")[0];
+
+                        }
+                        // td = tr[i].getElementById("td-department")[0];
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            // alert(txtValue);
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            </script>
 </body>
 
 

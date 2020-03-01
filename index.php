@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php include 'process/connect.php';
+<?php 
+include 'process/connect.php';
 include 'process/process.php';
 ?>
 

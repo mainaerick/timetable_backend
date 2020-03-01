@@ -1,11 +1,11 @@
 <?php
 include 'connect.php';
 session_start();
-$error_msg='';
+$error_msg = '';
 
 
 
-$editdep_name='';
+$editdep_name = '';
 
 $editlessonname = '';
 $editfragment = '';
@@ -37,12 +37,12 @@ $editcoursename = '';
 $editcourseyears = '';
 
 
-$editlec_reg_no='';
-$editlecname='';
-$editlecemail='';
+$editlec_reg_no = '';
+$editlecname = '';
+$editlecemail = '';
 
-$editroomname='';
-$editroomcapacity='';
+$editroomname = '';
+$editroomcapacity = '';
 // click edit on exams
 
 // if (isset($_GET['examedit'])) {
@@ -97,12 +97,9 @@ if (isset($_POST['update_exam'])) {
     // echo  $examsemester;
     // echo "/";
     // echo $examroom;
-    if (get_totime($examdate,$examtotime) <= get_fromtime($examdate,$examfromtime)){
+    if (get_totime($examdate, $examtotime) <= get_fromtime($examdate, $examfromtime)) {
         header("location: ../exams/exams.php?error");
-    }
-
-
-    else{
+    } else {
         //VALIDATE lecture
         $v_lec = $db->query("SELECT * FROM exam WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$examfromtime' AND '$examtotime' AND date='$examdate' AND supervisor='$examsupervisor'");
 
@@ -136,15 +133,8 @@ if (isset($_POST['update_exam'])) {
             where id=$id;") or die($db->error);
 
             header("location: ../exams/exams.php?saved");
-
         }
-
-        
-
     }
-
-
-    
 }
 
 // display data to update in inputboxes
@@ -188,18 +178,15 @@ if (isset($_POST['save_exam'])) {
 
 
     // $date1 = "12-02-2020 12:02 am";
-//     $date1 = $examdate." ".$examfromtime;
-// // $date2 = "12-02-2020 12:03 am";
-//     $date2 = $examdate. " ".$examtotime;
-//     $curtimestamp1 = strtotime($date1);
-//     $curtimestamp2 = strtotime($date2);
+    //     $date1 = $examdate." ".$examfromtime;
+    // // $date2 = "12-02-2020 12:03 am";
+    //     $date2 = $examdate. " ".$examtotime;
+    //     $curtimestamp1 = strtotime($date1);
+    //     $curtimestamp2 = strtotime($date2);
 
-    if (get_totime($examdate,$examtotime) <= get_fromtime($examdate,$examfromtime)){
+    if (get_totime($examdate, $examtotime) <= get_fromtime($examdate, $examfromtime)) {
         header("location: ../exams/exams.php?error");
-    }
-
-
-    else{
+    } else {
         // echo "$date1 is older than $date2";
         //VALIDATE lecture
         $v_lec = $db->query("SELECT * FROM exam WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$examfromtime' AND '$examtotime' AND date='$examdate' AND supervisor='$examsupervisor'");
@@ -220,7 +207,7 @@ if (isset($_POST['save_exam'])) {
         } elseif ($v_lec->num_rows) { // LECTURER NOT FREE
             header("location: ../exams/exams.php?error_lecoccupied=$timedisplay");
         } else {
-        $db->query("insert into exam values(null,'$examname',
+            $db->query("insert into exam values(null,'$examname',
         '$examcode',
         '$dept',
         '$examcourse',
@@ -231,35 +218,35 @@ if (isset($_POST['save_exam'])) {
         '$examfromtime',
         '$examtotime',
         '$examroom');")
-        or die(mysqli_error($db));
+                or die(mysqli_error($db));
             header("location: ../exams/exams.php?saved");
-
+        }
     }
-
-
-}
 }
 
-function validation($db){
-    
-
+function validation($db)
+{
 }
-function getTime ($ymd, $hi) {
-    return strtotime($ymd." ".$hi);
+function getTime($ymd, $hi)
+{
+    return strtotime($ymd . " " . $hi);
 }
 
-function get_fromtime($date,$time){
-    $date1 = $date." ".$time;
+function get_fromtime($date, $time)
+{
+    $date1 = $date . " " . $time;
     // $date2 = "12-02-2020 12:03 am";
     return strtotime($date1);
 }
 
-function get_totime($date,$time){
-    $date2 = $date. " ".$time;
+function get_totime($date, $time)
+{
+    $date2 = $date . " " . $time;
 
     return strtotime($date2);
 }
-function alert($msg) {
+function alert($msg)
+{
     echo "<script type='text/javascript'>alert('$msg');</script>";
 }
 
@@ -328,14 +315,12 @@ if (isset($_POST['update'])) {
     //     $course_id = $row['id'];
     // }
 
-    $default_date='12-02-2020';
+    $default_date = '12-02-2020';
 
 
-    if (get_totime($default_date,$totime) <= get_fromtime($default_date,$fromtime)){ //validate times
+    if (get_totime($default_date, $totime) <= get_fromtime($default_date, $fromtime)) { //validate times
         header("location: ../lesson/lesson.php?error");
-    }
-
-    else{
+    } else {
 
         //VALIDATE lecture
         $v_lec = $db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND lecturer='$lecturer'");
@@ -412,17 +397,14 @@ if (isset($_POST['update'])) {
 
             header("location: ../lesson/lesson.php?saved");
         }
-        
-
     }
-    
 }
 
 // delete lesson
 
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
-    $db->query("Delete from lesson where id= '$id'") or die($db->error());
+    $db->query("Delete from lesson where id= '$id'") or die($db->error);
     header("location: ../lesson/lesson.php");
 }
 
@@ -454,7 +436,7 @@ if (isset($_POST['save_lesson'])) {
         $course_id = $row['id'];
     }
 
-   
+
     // $db->query("insert into lesson values(null,'$lessonname',
     // '$code',
     // '$dept',
@@ -472,51 +454,44 @@ if (isset($_POST['save_lesson'])) {
 
     // gets one item timetable
     // 
-    $t_result=$db->query("select * from timetables where 
+    $t_result = $db->query("select * from timetables where 
     department='$dept' and 
     course='$course' and 
     year='$year' and 
     semester='$semester'") or die($db->error);
 
-    $default_date='12-02-2020';
+    $default_date = '12-02-2020';
 
 
-    if (get_totime($default_date,$totime) <= get_fromtime($default_date,$fromtime)){ //validate times
+    if (get_totime($default_date, $totime) <= get_fromtime($default_date, $fromtime)) { //validate times
         header("location: ../lesson/lesson.php?error");
-    }
-    else{
-        
-     //TIMETABLE EXIST 
-    if($t_result->num_rows){
-        $row=$t_result->fetch_array();
-        $t_id=$row['id'];
-    
+    } else {
 
-        //VALIDATE lecturer
-        $v_lec=$db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND lecturer='$lecturer'") or die($db->error);
+        //TIMETABLE EXIST 
+        if ($t_result->num_rows) {
+            $row = $t_result->fetch_array();
+            $t_id = $row['id'];
 
-        // VALIDATE room
-        $v_room=$db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND room='$room'") or die($db->error);
-       
-        // VALIDATE TIME OR CHECK IF TIME IS OCCUPIED 
-        $v_time=$db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND course_id='$t_id' AND room='$room' AND lecturer='$lecturer'") or die($db->error);
 
-        $timedisplay = date('h:i A', strtotime($fromtime))." - ". date('h:i A', strtotime($totime));
+            //VALIDATE lecturer
+            $v_lec = $db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND lecturer='$lecturer'") or die($db->error);
 
-        if($v_time->num_rows){ // TIME IS OCCUPIED, NOTIFY THE USER 
-            header("location: ../lesson/lesson.php?error_timeoccupied=$timedisplay");
+            // VALIDATE room
+            $v_room = $db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND room='$room'") or die($db->error);
 
-        }
-        elseif($v_room->num_rows){ //ROOM IS OCCUPIED
-            header("location: ../lesson/lesson.php?error_roomoccupied=$timedisplay");
+            // VALIDATE TIME OR CHECK IF TIME IS OCCUPIED 
+            $v_time = $db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND course_id='$t_id' AND room='$room' AND lecturer='$lecturer'") or die($db->error);
 
-        }
-        elseif($v_lec->num_rows){ // LECTURER NOT FREE
-            header("location: ../lesson/lesson.php?error_lecoccupied=$timedisplay");
-        }
-        
-        else{ // TIME/LEC/ROOM NOT OCCUPIED INSERT INTO DATABASE
-            $db->query("insert into lesson values(null,'$lessonname',
+            $timedisplay = date('h:i A', strtotime($fromtime)) . " - " . date('h:i A', strtotime($totime));
+
+            if ($v_time->num_rows) { // TIME IS OCCUPIED, NOTIFY THE USER 
+                header("location: ../lesson/lesson.php?error_timeoccupied=$timedisplay");
+            } elseif ($v_room->num_rows) { //ROOM IS OCCUPIED
+                header("location: ../lesson/lesson.php?error_roomoccupied=$timedisplay");
+            } elseif ($v_lec->num_rows) { // LECTURER NOT FREE
+                header("location: ../lesson/lesson.php?error_lecoccupied=$timedisplay");
+            } else { // TIME/LEC/ROOM NOT OCCUPIED INSERT INTO DATABASE
+                $db->query("insert into lesson values(null,'$lessonname',
             '$code',
             '$dept',
             '$course',
@@ -529,21 +504,16 @@ if (isset($_POST['save_lesson'])) {
             '$totime',
             '$color',
             $t_id);") or die($db->error);
-            header("location: ../lesson/lesson.php?saved");
-
+                header("location: ../lesson/lesson.php?saved");
+            }
         }
 
+        // TIMETABLE DOESN'T EXIST
 
-        
-    }
+        else {
 
-    // TIMETABLE DOESN'T EXIST
 
-    else
-    {
-        
-
-        $db->query("insert into timetables values(null,
+            $db->query("insert into timetables values(null,
         '$dept',
         '$course',
         '$year',
@@ -551,12 +521,12 @@ if (isset($_POST['save_lesson'])) {
         )") or die($db->error);
 
 
-        // GET LAST ID AFTER TIMETABLE EXIST
+            // GET LAST ID AFTER TIMETABLE EXIST
 
 
-        $last_id_q=$db->query("select * from timetables ORDER BY id DESC LIMIT 1;");
-        $row=$last_id_q->fetch_array();
-        $last_id=$row['id'];
+            $last_id_q = $db->query("select * from timetables ORDER BY id DESC LIMIT 1;");
+            $row = $last_id_q->fetch_array();
+            $last_id = $row['id'];
 
             //VALIDATE lecture
             $v_lec = $db->query("SELECT * FROM lesson WHERE TIME(from_time) AND TIME(to_time) BETWEEN '$fromtime' AND '$totime' AND fragment='$fragment' AND lecturer='$lecturer'");
@@ -575,8 +545,8 @@ if (isset($_POST['save_lesson'])) {
                 header("location: ../lesson/lesson.php?error_roomoccupied=$timedisplay");
             } elseif ($v_lec->num_rows) { // LECTURER NOT FREE
                 header("location: ../lesson/lesson.php?error_lecoccupied=$timedisplay");
-            } else {// insert
-                
+            } else { // insert
+
                 $db->query("insert into lesson values(null,'$lessonname',
                                                             '$code',
                                                             '$dept',
@@ -592,12 +562,7 @@ if (isset($_POST['save_lesson'])) {
                                                         last_id);") or die($db->error);
                 header("location: ../lesson/lesson.php?saved");
             }
-
-       
-    
-    
-    }
-    
+        }
     }
 }
 // edit course
@@ -611,7 +576,7 @@ if (isset($_GET['edit_course'])) {
         $row = $result->fetch_array();
 
         $editcoursename = $row['course_name'];
-        $editcourseyears =$row['years_of_study'];
+        $editcourseyears = $row['years_of_study'];
     }
 }
 
@@ -619,7 +584,7 @@ if (isset($_GET['edit_course'])) {
 if (isset($_POST['update_course'])) {
     $id = $_POST['course_id'];
     $coursename = $_POST['course_name'];
-    $course_years= $_POST['course_years'];
+    $course_years = $_POST['course_years'];
     $dept = $_SESSION['ldep'];
 
     $result = $db->query("select * from courses where course_name=''");
@@ -639,13 +604,12 @@ if (isset($_POST['update_course'])) {
 // delete course
 if (isset($_GET['delete_course'])) {
     $id = $_GET['delete_course'];
-    $get_coursename=$db->query("select * from courses where id=$id") or die($db->error); 
+    $get_coursename = $db->query("select * from courses where id=$id") or die($db->error);
     if ($get_coursename->num_rows) {
         $row = $get_coursename->fetch_array();
         $db->query("delete from courses where id=$id")  or die($db->error);
-        $name=$row['course_name'];
+        $name = $row['course_name'];
         $db->query("delete from lesson where course='$name'") or die($db->error);
-
     }
 
     // header("location: ../course/course.php?deleted");
@@ -656,7 +620,7 @@ if (isset($_POST['save_course'])) {
 
     $coursename = $_POST['course_name'];
     $dept = $_SESSION['ldep_name'];
-    $course_years= $_POST['course_years'];
+    $course_years = $_POST['course_years'];
 
     $result = $db->query("select * from courses where course_name='$coursename'");
 
@@ -716,7 +680,7 @@ if (isset($_POST['save_lecturer'])) {
 
     $lec_name = $_POST['lec_name'];
     $lec_email = $_SESSION['lec_email'];
-    $lec_regno=$_POST['lec_reg_no'];
+    $lec_regno = $_POST['lec_reg_no'];
     $department = $_SESSION['ldep_name'];
 
     $result = $db->query("select * from lecturer where reg_no='$lec_regno'");
@@ -759,7 +723,7 @@ if (isset($_POST['update_room'])) {
 
         $_SESSION['room_exist'] = "Room already exists";
         header("location: ../room/room.php");
-    }  else {
+    } else {
         $db->query("update room set name='$room_name',capacity='$room_capacity' where id=$id;");
         unset($_SESSION['room_add_open']);
         header("location: ../room/room.php?updated");
@@ -989,82 +953,67 @@ if (isset($_POST['login'])) {
     $lpass = $_POST['password'];
     // $ldepartment = $_POST['ldepartment'];
     $result = $db->query("select * from users where username= '$name' and password='$lpass'");
-    
+
     if ($result->num_rows) {
 
-        if($name==="eric"){
+        if ($name === "eric") {
             while ($row = $result->fetch_assoc()) {
                 $_SESSION['id'] = $row['id'];
                 $_SESSION['succ'];
-    
             }
             header("location: ../admin/admin.php");
-
-        }
-        else{
+        } else {
             while ($row = $result->fetch_assoc()) {
-                if($row['status']==="not approved"){
+                if ($row['status'] === "not approved") {
                     $_SESSION['login_err'] = "User Not Approved Yet!";
                     header("location: ../index.php");
-    
-                }
-                else if($row['status']==="approved"){
+                } else if ($row['status'] === "approved") {
                     $_SESSION['id'] = $row['id'];
                     $_SESSION['succ'];
-                    $_SESSION['ldep_name']=$row['department'];
+                    $_SESSION['ldep_name'] = $row['department'];
                     header("location: ../lesson/lesson.php");
                 }
                 // $_SESSION['ldep'] = $row['department'];
             }
         }
-       
-       
     } else {
         $_SESSION['login_err'] = "Invalid Username or Password";
         header("location: ../index.php");
     }
 }
 
-if (isset($_POST['signup'])){
-    $u_name=$_POST['username'];
-    $u_department=$_POST['department'];
-    $u_email=$_POST['email'];
+if (isset($_POST['signup'])) {
+    $u_name = $_POST['username'];
+    $u_department = $_POST['department'];
+    $u_email = $_POST['email'];
     $result = $db->query("select * from users where username= '$u_name' and department='$u_department'");
-    if ($result->num_rows){
+    if ($result->num_rows) {
         $_SESSION['signup_err'] = "user already exist";
         header("location: ../signup/sinup.php");
-    }
-    else{
-        $chk_dep=$db->query("select * from department where name='$u_department'");
+    } else {
+        $chk_dep = $db->query("select * from department where name='$u_department'");
         if ($chk_dep->num_rows) {
             # code...
             $db->query("insert into users values(null,'$u_name','1234','$u_department','not approved','$u_email')") or die($db->error);
-        $_SESSION['signup_err'] = "User created successfully, an email will be sent after aprroval";
-        header("location: ../signup/sinup.php");
-        }
-        else{
+            $_SESSION['signup_err'] = "User created successfully, an email will be sent after aprroval";
+            header("location: ../signup/sinup.php");
+        } else {
             $_SESSION['signup_err'] = "No department with that name";
-        header("location: ../signup/sinup.php");
+            header("location: ../signup/sinup.php");
         }
-
-        
     }
-
 }
 
-if (isset($_GET['approve'])){
-    $user_id=$_GET['approve'];
+if (isset($_GET['approve'])) {
+    $user_id = $_GET['approve'];
     $db->query("update users set status='approved' where id=$user_id;") or die($db->error);
     header("location: ../users/users.php");
-
-
 }
 
-if (isset($_GET['dis_approve'])){
-    $user_id=$_GET['dis_approve'];
+if (isset($_GET['dis_approve'])) {
+    $user_id = $_GET['dis_approve'];
     $db->query("update users set status='not approved' where id=$user_id;") or die($db->error);
     header("location: ../users/users.php");
-
 }
 
 
@@ -1075,14 +1024,14 @@ if (isset($_POST['change_dept'])) {
         while ($row = mysqli_fetch_array($result)) {
             unset($_SESSION['ldep']);
             $_SESSION['ldep'] = $row['id'];
-            $_SESSION['ldep_name']=$row['name'];
+            $_SESSION['ldep_name'] = $row['name'];
             unset($_SESSION['no_dep']);
             unset($_SESSION['lcourse']);
         }
         $page = $_SESSION['page'];
         header("location: $page");
     } else {
-        $_SESSION['no_dep']="Invalid Department Name";
+        $_SESSION['no_dep'] = "Invalid Department Name";
         $page = $_SESSION['page'];
         header("location: $page");
     }
@@ -1109,9 +1058,9 @@ if (isset($_POST['dep_search'])) {
             // </select>';
 
             // echo "<p>" . $user['name'] . "</p>";
-            
+
             echo '<a class="nav-link" href="#">' . $user['name'] . '</a><br>';
-        
+
             // echo $user['name']."<br/>";
             // echo $output;
         }
@@ -1120,55 +1069,53 @@ if (isset($_POST['dep_search'])) {
     }
 }
 
-if(isset($_GET['view_timetable_lesson'])){
-    $id=$_GET['view_timetable_lesson'];
+if (isset($_GET['view_timetable_lesson'])) {
+    $id = $_GET['view_timetable_lesson'];
     $result = $db->query("SELECT * FROM timetables WHERE id=$id");
     while ($row = mysqli_fetch_array($result)) {
-        $dept_name=$row['department'];
-        $ltablecourse=$row['course'];
-        $lyear=$row['year'];
-        $lsemester=$row['semester'];
+        $dept_name = $row['department'];
+        $ltablecourse = $row['course'];
+        $lyear = $row['year'];
+        $lsemester = $row['semester'];
     }
 }
-if(isset($_GET['view_timetable_exam'])){
-    $id=$_GET['view_timetable_exam'];
+if (isset($_GET['view_timetable_exam'])) {
+    $id = $_GET['view_timetable_exam'];
     $result = $db->query("SELECT * FROM timetables WHERE id=$id");
     while ($row = mysqli_fetch_array($result)) {
-        $dept=$row['department'];
-        $ltablecourse=$row['course'];
-        $lyear=$row['year'];
-        $lsemester=$row['semester'];
+        $dept = $row['department'];
+        $ltablecourse = $row['course'];
+        $lyear = $row['year'];
+        $lsemester = $row['semester'];
+    }
 }
-}
 
 
 
-if(isset($_GET['timeslots'])){
+if (isset($_GET['timeslots'])) {
     $start_time = '07:00';  //start time as string
     $end_time = '19:00';  //end time as string
     $booked = array();
-    $day= $_GET['timeslots'];
-    $course_name=$_GET['course_name'];
+    $day = $_GET['timeslots'];
+    $course_name = $_GET['course_name'];
     $yearselected = $_GET['selected_year'];;
     $semester_selected = $_GET['selected_semester'];
     // array('12:00-13:00', '14:00-15:00');    //booked slots as arrays
     // $dep_namefor_time = $_SESSION['ldep_name'];
-    
+
     $course_namefortime = $_SESSION['lcourse'];
-    if(empty($course_name) || empty($yearselected) || empty($semester_selected)){
-        $out=array();
-        $text="please select a course, year and semester to view free timeslots";
-        array_push($out,$text);
+    if (empty($course_name) || empty($yearselected) || empty($semester_selected)) {
+        $out = array();
+        $text = "please select a course, year and semester to view free timeslots";
+        array_push($out, $text);
         echo json_encode($out);
-        
-    }
-    else{
+    } else {
 
         $result = $db->query("select * from lesson where fragment='$day' and
     course='$course_name' and
     year_of_study='$yearselected' and
     semester='$semester_selected'"); // GET TIME ALLOCTED IN THE DB
-    if ($result->num_rows) {
+        if ($result->num_rows) {
             while ($row = $result->fetch_array()) {
                 // print_r("Allocated time=>   ".$row['from_time']."-". $row['to_time']);
                 $time_set = '12:00-14:00';
@@ -1189,87 +1136,49 @@ if(isset($_GET['timeslots'])){
                 }
             }
 
-        $start = DateTime::createFromFormat('H:i', $start_time);  //create date time objects
-        $end = DateTime::createFromFormat('H:i', $end_time);  //create date time objects
-        $count = 0;  //number of slots
-        $out = array();   //array of slots 
-        for ($i = $start; $i < $end;)  //for loop 
-        {
-            $avoid = false;   //booked slot?
-            $time1 = $i->format('H:i');   //take hour and minute
-            $i->modify("+60 minutes");      //add 60 minutes/1 HR
-            $time2 = $i->format('H:i');     //take hour and minute
-            $slot = $time1 . "-" . $time2;      //create a format 12:40-13:00 etc
-            for ($k = 0; $k < sizeof($booked); $k++)  //if booked hour
+            $start = DateTime::createFromFormat('H:i', $start_time);  //create date time objects
+            $end = DateTime::createFromFormat('H:i', $end_time);  //create date time objects
+            $count = 0;  //number of slots
+            $out = array();   //array of slots 
+            for ($i = $start; $i < $end;)  //for loop 
             {
-                if ($booked[$k] == $slot)  //check
-                    $avoid = true;   //yes. booked
+                $avoid = false;   //booked slot?
+                $time1 = $i->format('H:i');   //take hour and minute
+                $i->modify("+60 minutes");      //add 60 minutes/1 HR
+                $time2 = $i->format('H:i');     //take hour and minute
+                $slot = $time1 . "-" . $time2;      //create a format 12:40-13:00 etc
+                for ($k = 0; $k < sizeof($booked); $k++)  //if booked hour
+                {
+                    if ($booked[$k] == $slot)  //check
+                        $avoid = true;   //yes. booked
 
+                }
+                if (!$avoid && $i < $end)  //if not booked and less than end time
+                {
+                    $count++;           //add count
+                    $slots = $time1 . "-" . $time2;
+                    echo "\n";         //add count
+                    array_push($out, $slots); //add slot to array
+                }
             }
-            if (!$avoid && $i < $end)  //if not booked and less than end time
-            {
-                $count++;           //add count
-                $slots = $time1 . "-" . $time2;
-                echo "\n";         //add count
-                array_push($out, $slots); //add slot to array
-            }
-        }
-        echo json_encode($out);
-        
-    }
-    else{
+            echo json_encode($out);
+        } else {
             $out = array();
             $text = "error communication with the server";
             array_push($out, $text);
             echo json_encode($out);
+        }
+
+        // print_r($out) ;
+
+        // $m = 0;
+        // while ($m < $count) {
+
+        // // echo '<option>';
+        // echo $out[$m];
+        // // echo '</option>';
+
+        // $m++;}
+
     }
-        
-    // print_r($out) ;
-
-    // $m = 0;
-    // while ($m < $count) {
-
-    // // echo '<option>';
-    // echo $out[$m];
-    // // echo '</option>';
-
-    // $m++;}
-    
 }
-    
-}
-
-    
-        
-
-
-
-
-
-
-
-
-// if($result->num_rows){
-    // $password=$row['password'];
-// while($row=$result->fetch_assoc()){
-        //     $name=$row['username'];
-            
-            // if($_POST['username']==$name && $_POST['password']==$password){
-            //     header("location:../lesson/lesson.php");
-            // }
-            // else{
-            //     $_SESSION['login_err']="Invalid Username or Password";
-            //     header("location:../index.php");
-
-            // }
-            
-        // }
-        
-    // }
-    
-
-// }
-// else{
-//     $db->error;
-// }
-//     if(isset($_POST['submit'])){

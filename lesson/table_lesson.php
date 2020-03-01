@@ -9,55 +9,100 @@
 </head>
 
 <body>
+
+
+    <script>
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, j, txtValue, selected_value, td_count
+            input = document.getElementById("search_lessons");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("table_lessons");
+            tr = table.getElementsByTagName("tr");
+            // selected_value = document.getElementById("select_filter").value;
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                for (j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+                    td = tr[i].getElementsByTagName("td")[j];
+
+
+                    // td = tr[i].getElementById("td-department")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        // alert(txtValue);
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].getElementsByTagName("td")[j].style.display = "";
+                        } else {
+                            tr[i].getElementsByTagName("td")[j].style.display = "none";
+                        }
+                    }
+
+                }
+            }
+        }
+    </script>
+
     <!-- Tables start -->
     <div class="flex-row justify-content-start" style="width: 100%;">
 
         <!-- <a href="../lesson/lesson.php?addlesson" id="addlbtn" type="hidden" class="btn btn-outline-primary" style="margin-top: 2%; margin-bottom: 2%;">Add Lesson</a> -->
 
-
         <a href="../lesson/lesson.php?print" type="hidden" class="btn btn-outline-primary btn-sm" style="margin-top: 2%; margin-bottom: 2%;">Print view</a>
+
+        <form class="col form-inline justify-content-end" style="margin-bottom: 2%;">
+            <input id="search_lessons" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <!-- <select class="my-2 my-sm-0" id="select_filter">
+                    <option selected>filter by</option>
+                    <option value="name">name</option>
+                    <option value="code">code</option>
+                    <option value="lecturer">lecturer</option>
+                    <option value="time">time</option>
+                </select> -->
+            <!-- <select class="my-2 my-sm-0" id="select_filter">
+                    <option selected value="monday">monday</option>
+                    <option value="tuesday">tuesday</option>
+                    <option value="wednesday">wednesday</option>
+                    <option value="thursday">thursday</option>
+                    <option value="friday">friday</option>
+
+                </select> -->
+        </form>
+
 
 
 
     </div>
 
     <div id="hidden" class="">
-
-
-        <table class="table table-sm table-bordered">
+        <table class="table table-sm table-bordered" id="table_lessons">
             <thead class="thead-dark">
-                <tr>
-                    <th>MONDAY</th>
-                    <th>TUESDAY</th>
-                    <th>WEDNESDAY</th>
-                    <th>THURSDAY</th>
-                    <th>FRIDAY</th>
-
-
-                </tr>
+                <th>Days</th>
             </thead>
             <tbody>
 
 
+
                 <tr>
-                    <!-- NAME -->
-                    <td class="text-lg">
-                        <?php
-                        $lessons_result_monday = $db->query("select * from lesson where fragment='monday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
-                        if (!empty($lessons_result_monday)) {
+                    <!-- Monday -->
+                    <th>Monday</th>
+                    <?php
+                    $lessons_result_monday = $db->query("select * from lesson where fragment='monday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
+                    if (!empty($lessons_result_monday)) {
 
-                            while ($row = $lessons_result_monday->fetch_assoc()) {
-                                // echo $row['lesson_name'];
+                        while ($row = $lessons_result_monday->fetch_assoc()) {
+                            // echo $row['lesson_name'];
+                    ?>
+
+                            <td class="" id="monday">
 
 
-
-                                echo $row['lesson_name']; ?>
+                                <? echo $row['lesson_name']; ?>
                                 <br><br>
 
                                 Time:
                                 <?php echo date('h:i A', strtotime($row['from_time'])); ?> -
                                 <?php echo date('h:i A', strtotime($row['to_time'])) ?>
-                                <br><br>
+                                <br>
 
                                 Lecturer: <?php echo $row['lecturer']; ?>
                                 <br><br>
@@ -68,103 +113,124 @@
 
                                 <br>
                                 <br>
-                        <?php }
-                        } ?>
+                            </td>
 
-                    </td>
-                    <!-- CODE -->
-                    <td class="h6">
-                        <?php
+                    <?php }
+                    } ?>
 
-                        $lessons_result_tuesday = $db->query("select * from lesson where fragment='tuesday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
-                        if (!empty($lessons_result_tuesday)) {
-                            while ($row = $lessons_result_tuesday->fetch_assoc()) {
-                                // echo $row['lesson_name'];
-                                echo $row['lesson_name']; ?>
+
+                </tr>
+
+                <tr>
+                    <th>Tuesday</th>
+                    <?php
+
+                    $lessons_result_tuesday = $db->query("select * from lesson where fragment='tuesday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
+                    if (!empty($lessons_result_tuesday)) {
+                        while ($row = $lessons_result_tuesday->fetch_assoc()) {
+                            // echo $row['lesson_name'];
+                    ?>
+                            <td class="h6" id="tuesday">
+
+                                <? echo $row['lesson_name']; ?>
                                 <br><br>
                                 Time:
                                 <?php echo date('h:i A', strtotime($row['from_time'])); ?> -
                                 <?php echo date('h:i A', strtotime($row['to_time'])) ?>
-                                <br><br>
+                                <br>
                                 Lecturer: <?php echo $row['lecturer']; ?>
                                 <br><br>
                                 <a href="../lesson/lesson.php?edit=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <a href="../process/process.php?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary">Delete</a>
                                 <!-- <hr> -->
-                        <?php }
-                        } ?>
-                    </td>
-                    <!-- COURSE -->
-                    <td class="h6">
-                        <?php
-                        $lessons_result_wednesday = $db->query("select * from lesson where fragment='wednesday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
-                        if (!empty($lessons_result_wednesday)) {
+                            </td>
 
-                            while ($row = $lessons_result_wednesday->fetch_assoc()) {
-                                // echo $row['lesson_name'];
+                    <?php }
+                    } ?>
+                </tr>
+                <tr>
+                    <th>Wednesday</th>
+                    <?php
+                    $lessons_result_wednesday = $db->query("select * from lesson where fragment='wednesday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
+                    if (!empty($lessons_result_wednesday)) {
 
-                                echo $row['lesson_name']; ?>
+                        while ($row = $lessons_result_wednesday->fetch_assoc()) {
+                            // echo $row['lesson_name'];
+                    ?>
+                            <td class="h6" id="wednesday">
+
+                                <? echo $row['lesson_name']; ?>
                                 <br><br>
                                 Time:
                                 <?php echo date('h:i A', strtotime($row['from_time'])); ?> -
                                 <?php echo date('h:i A', strtotime($row['to_time'])) ?>
-                                <br><br>
+                                <br>
                                 Lecturer: <?php echo $row['lecturer']; ?>
                                 <br><br>
                                 <a href="../lesson/lesson.php?edit=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <a href="../process/process.php?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary">Delete</a>
                                 <!-- <hr> -->
-                        <?php }
-                        } ?>
-                    </td>
+                            </td>
 
-                    <!-- SEMESTER -->
-                    <td class="h6">
-                        <?php
-                        $lessons_result_thursday = $db->query("select * from lesson where fragment='thursday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
-                        if (!empty($lessons_result_thursday)) {
+                    <?php }
+                    } ?>
+                </tr>
+                <tr>
+                    <th>Thursday</th>
+                    <?php
+                    $lessons_result_thursday = $db->query("select * from lesson where fragment='thursday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
+                    if (!empty($lessons_result_thursday)) {
 
-                            while ($row = $lessons_result_thursday->fetch_assoc()) {
-                                // echo $row['lesson_name'];
-                                echo $row['lesson_name']; ?>
+                        while ($row = $lessons_result_thursday->fetch_assoc()) {
+                            // echo $row['lesson_name'];
+                    ?>
+                            <td class="h6" id="thursday">
+
+                                <? echo $row['lesson_name']; ?>
                                 <br><br>
                                 Time:
                                 <?php echo date('h:i A', strtotime($row['from_time'])); ?> -
                                 <?php echo date('h:i A', strtotime($row['to_time'])) ?>
-                                <br><br>
+                                <br>
                                 Lecturer: <?php echo $row['lecturer']; ?>
                                 <br><br>
                                 <a href="../lesson/lesson.php?edit=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <a href="../process/process.php?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary">Delete</a>
                                 <!-- <hr> -->
-                        <?php }
-                        } ?>
-                    </td>
-                    <!-- supervisor -->
-                    <td class="h6">
-                        <?php
-                        $lessons_result_friday = $db->query("select * from lesson where fragment='friday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
-                        if (!empty($lessons_result_friday)) {
 
-                            while ($row = $lessons_result_friday->fetch_assoc()) {
-                                // echo $row['lesson_name'];
-                                echo $row['lesson_name']; ?>
+                            </td>
+
+                    <?php }
+                    } ?>
+                </tr>
+                <tr>
+                    <th>Friday</th>
+                    <?php
+                    $lessons_result_friday = $db->query("select * from lesson where fragment='friday' and department='$dept_name' and course='$ltablecourse' and year_of_study='$lyear' and semester='$lsemester';");
+                    if (!empty($lessons_result_friday)) {
+
+                        while ($row = $lessons_result_friday->fetch_assoc()) {
+                            // echo $row['lesson_name'];
+                    ?>
+                            <td class="h6" id="friday">
+                                <? echo $row['lesson_name']; ?>
                                 <br><br>
                                 Time:
                                 <?php echo date('h:i A', strtotime($row['from_time'])); ?> -
                                 <?php echo date('h:i A', strtotime($row['to_time'])) ?>
-                                <br><br>
+                                <br>
                                 Lecturer: <?php echo $row['lecturer']; ?>
                                 <br><br>
                                 <a href="../lesson/lesson.php?edit=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary">Edit</a>
 
                                 <button class="btn btn-outline-primary btn-delete" data-id=" <?php echo $row['id']; ?>">Delete</button>
                                 <!-- <hr> -->
-                        <?php }
-                        } ?>
-                    </td>
+                            </td>
 
+                    <?php }
+                    } ?>
                 </tr>
+
 
 
             </tbody>
@@ -235,6 +301,9 @@
                 });
         }
     </script>
+
+
+
 </body>
 
 </html>

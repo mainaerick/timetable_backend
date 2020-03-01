@@ -59,7 +59,7 @@ $_SESSION['page'] = '../lesson/lesson.php';
         // }
         ?>
         <? if (isset($_GET['error'])) {
-            alert("invalid time input start time");
+            // alert("invalid time input start time");
             $error_msg = "invalid time start time is less than end time";
         } elseif (isset($_GET['error_lecoccupied'])) {
             $error_msg = "Lecturer will not be available at that particular time(" . $_GET['error_lecoccupied'] . ")";
@@ -245,8 +245,11 @@ $_SESSION['page'] = '../lesson/lesson.php';
                             include 'addlesson.php';
                             ?>
                         </div>
-                        <div class="col-sm-5">
-                            <?php include 'listlessons_available.php' ?>
+                        <div class="col-sm-2">
+                            <?php include 'roomsavail.php' ?>
+                        </div>
+                        <div class="col-sm-2">
+                            <?php include 'lecturer_available.php' ?>
                         </div>
                     <?php
                     }

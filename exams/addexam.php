@@ -19,7 +19,7 @@
         </div>
         
         <div style="margin-bottom: 3px;" class="row justify-content-end">
-            <a href="../exams/exams.php?hide_exam_add" class="btn btn-outline-secondary btn-sm" role="group" aria-label="Third group" style="">Hide</a>
+            <a href="../exams/exams.php?hide_exam_add" class="btn btn-outline-secondary btn-sm" role="group" aria-label="Third group">Hide</a>
         </div>
 
 

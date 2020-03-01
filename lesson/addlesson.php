@@ -25,7 +25,7 @@
 
         <div style="margin-bottom: 3px;" class="row justify-content-end">
             <!-- <button id="close_lesson" class="btn btn-outline-secondary btn-sm">Close</button> -->
-            <a class="btn btn-outline-secondary btn-sm" href="../lesson/lesson.php?doneaddlesson" role="group" aria-label="Third group" style="">Close</a>
+            <a class="btn btn-outline-secondary btn-sm" href="../lesson/lesson.php?doneaddlesson" role="group" aria-label="Third group">Close</a>
 
         </div>
 
@@ -152,7 +152,7 @@
             <div class="col-sm-4">
                 <label for="time_slots">Free time slots</label>
                 <select class="form-control form-control-sm" name="time_slots" id="timeslot">
-                
+
                 </select>
             </div>
         </div>
@@ -165,7 +165,7 @@
                         <input class="btn btn-outline-success" type="submit" name="update" value="Update">
                     <?php }
                     ?>
-                
+
                     includes/sidebar.php
                 </div>
 
@@ -227,6 +227,9 @@
             });
         }
     </Script>
+
+
+
 
 </body>
 

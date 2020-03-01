@@ -10,7 +10,7 @@ check_login();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
+    <title>users</title>
 
     <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css">
@@ -32,22 +32,33 @@ check_login();
     include "../includes/nav.php";
     ?>
 
-<?php
-        // if (isset($_GET['addlesson']) || isset($_GET['edit']) || isset($_GET['saved'])) {
+    <?php
+    // if (isset($_GET['addlesson']) || isset($_GET['edit']) || isset($_GET['saved'])) {
 
-        // }
-        // else{
-        include "../includes/sidebar_admin.php";
+    // }
+    // else{
+    include "../includes/sidebar_admin.php";
 
-        // }
-        ?>
+    // }
+    ?>
 
     <div class="container" style="margin-top: 3%;">
-        
-        <table class="table table-sm table-bordered">
+        <nav class="navbar  navbar-light bg-light">
+            <form class="form flex-box">
+                <input id="search" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <select class="my-2 my-sm-0" id="select_filter">
+                    <option selected>filter by</option>
+                    <option value="user name">user name</option>
+                    <option value="email">email</option>
+                    <option value="department">department</option>
+                    <option value="status">status</option>
+
+                </select>
+            </form>
+        </nav>
+        <table class="table table-sm table-bordered table-hover" id="user_table">
             <thead class="thead-dark">
                 <tr>
-                    <th>#</th>
                     <th>User name</th>
                     <th>Email</th>
                     <th>Department</th>
@@ -63,6 +74,7 @@ check_login();
                     $i = 0;
                     while ($row = $datalist_lesson->fetch_assoc()) {
                         $i++;
+<<<<<<< Updated upstream
                         ?>
 
 
@@ -90,7 +102,7 @@ check_login();
 
                     <!-- status -->
                     <td class="h6">
-                        <?php 
+                        <? 
                         if($row['status']==="not approved"){?>
                             <a href="../process/process.php?approve=<?php echo $row['id']; ?>"
                             class="btn btn-sm btn-outline-primary">Approve</a>
@@ -111,12 +123,58 @@ check_login();
                     <!-- action -->
                     <!-- <td class="h6">
                         <a href="../course/course.php?edit_course=<?php echo $row['id']; ?>"
+=======
+                ?>
+                        <tr>
+                            <!-- name -->
+                            <td class="h6">
+                                <?php echo $row['username']; ?>
+                            </td>
+
+                            <!-- user email -->
+                            <td class="h6">
+                                <?php echo $row['email']; ?>
+                            </td>
+
+                            <!-- department -->
+                            <td id="td-department" class="h6">
+                                <?php echo $row['department']; ?>
+                            </td>
+
+                            <!-- status -->
+                            <td class="h6">
+                                <?
+                                if ($row['status'] === "not approved") { 
+                                    ?>
+                                    <a href="../process/process.php?approve=<?php echo $row['id'];
+                                    ?>&user_email=<? echo $row['email']; ?>&user_dep=<? echo str_replace("&", "%26", $row['department']);
+                                    ?>" class="btn btn-sm btn-outline-primary">Approve</a>
+                                <? } else { ?>
+                                    <a href="../process/process.php?dis_approve=<?php echo $row['id']; 
+                                    ?>" class="btn btn-sm btn-outline-primary">User Approved</a>
+                                <?
+                                }
+                                ?>
+
+
+                            </td>
+
+
+
+                            <!-- action -->
+                            <!-- <td class="h6">
+                        <a href="../course/course.php?edit_course=<?php
+                                                                    // echo $row['id']; 
+                                                                    ?>"
+>>>>>>> Stashed changes
                             class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a href="../process/process.php?delete_course=<?php echo $row['id']; ?>"
+                        <a href="../process/process.php?delete_course=<?php
+                                                                        //  echo $row['id']; 
+                                                                        ?>"
                             class="btn btn-sm btn-outline-primary">Delete</a>
                     </td> -->
 
-                </tr>
+                        </tr>
                 <?php  }
                 } ?>
 
@@ -124,6 +182,48 @@ check_login();
 
         </table>
     </div>
+
+    <script>
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue, selected_value;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("user_table");
+            tr = table.getElementsByTagName("tr");
+            selected_value = document.getElementById("select_filter").value;
+            // alert(selected_value);
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                if (selected_value == 'department') {
+                    td = tr[i].getElementsByTagName("td")[2];
+
+                } else if (selected_value == 'username') {
+                    td = tr[i].getElementsByTagName("td")[0];
+
+                } else if (selected_value == 'email') {
+                    td = tr[i].getElementsByTagName("td")[1];
+
+                } else if (selected_value == 'status') {
+                    td = tr[i].getElementsByTagName("td")[3];
+
+                } else {
+                    td = tr[i].getElementsByTagName("td")[0];
+
+                }
+                // td = tr[i].getElementById("td-department")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    // alert(txtValue);
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 
 
 
@@ -157,5 +257,4 @@ check_login();
     });
     </script> -->
 </body>
-
 </html>

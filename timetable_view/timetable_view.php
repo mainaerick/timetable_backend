@@ -44,10 +44,21 @@ check_login();
 
     <div class="container" style="margin-top: 3%;">
 
-        <table class="table table-sm table-bordered">
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline">
+                <input id="search_timetable" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search timetables" aria-label="Search timetables">
+                <select class="custom-select my-2 my-sm-0" id="select_filter">
+                    <option selected>filter by</option>
+                    <option value="course">course</option>
+                    <option value="year">year</option>
+                    <option value="semester">semester</option>
+                </select>
+            </form>
+        </nav>
+
+        <table class="table table-sm table-bordered" id="timetable_table">
             <thead class="thead-dark">
                 <tr>
-                    <th>#</th>
                     <th>Course</th>
                     <th>Department</th>
                     <th>Year</th>
@@ -70,11 +81,6 @@ check_login();
 
 
                         <tr>
-                            <!-- number -->
-                            <td class="h6">
-                                <?php echo $i; ?>
-
-                            </td>
 
                             <!-- course -->
                             <td class="h6">
@@ -133,6 +139,47 @@ check_login();
     </div>
 
 
+    <script>
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue, selected_value;
+            input = document.getElementById("search_timetable");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("timetable_table");
+            tr = table.getElementsByTagName("tr");
+            selected_value = document.getElementById("select_filter").value;
+            // alert(selected_value);
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                if (selected_value == 'department') {
+                    td = tr[i].getElementsByTagName("td")[1];
+
+                } else if (selected_value == 'course') {
+                    td = tr[i].getElementsByTagName("td")[0];
+
+                } else if (selected_value == 'year') {
+                    td = tr[i].getElementsByTagName("td")[2];
+
+                } else if (selected_value == 'semester') {
+                    td = tr[i].getElementsByTagName("td")[3];
+
+                } else {
+                    td = tr[i].getElementsByTagName("td")[0];
+
+                }
+                // td = tr[i].getElementById("td-department")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    // alert(txtValue);
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 
 </body>
 

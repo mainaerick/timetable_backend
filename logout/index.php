@@ -1,1 +1,2 @@
-<?php header "location lesson.php"; ?>
+<?php 
+// header "location lesson.php"; ?>
