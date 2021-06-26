@@ -35,12 +35,7 @@
 
             </ul> -->
             <a href="../users/users.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Users</a>
-<<<<<<< Updated upstream
             <a href="../room/room.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Room</a>
-=======
-            <a href="../room/room.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Rooms</a>
-
->>>>>>> Stashed changes
 
         </div>
     </div>

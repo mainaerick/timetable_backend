@@ -52,19 +52,19 @@ $_SESSION['page'] = '../course/course.php';
                         if (empty($_SESSION['course_add_open'])) {
                             // isset($_GET['addlesson']) || isset($_GET['edit']) ||
 
-                            ?>
+                        ?>
                             <a id="addcbtn" href="../process/process.php?addcourse" type="hidden" class="btn btn-outline-primary btn-sm">Add Course</a>
-                        
-                        <hr>
+
+                            <hr>
                         <?php }
                         ?>
                     </div>
 
 
-                    
+
 
                 </div>
-                
+
 
 
                 <div class="row justify-content-center">
@@ -73,19 +73,47 @@ $_SESSION['page'] = '../course/course.php';
                     if (!empty($_SESSION['course_add_open']) && $_SESSION['course_add_open']) {
                         // isset($_GET['addlesson']) || isset($_GET['edit']) ||
 
-                        ?>
+                    ?>
                         <div class="col-sm-2">
                             <?php  ?>
                         </div>
                         <div class="col">
                             <?php
                             include 'addcourse.php';
+                            // }
+                            // else if(!empty($_SESSION['unit_add_open']) && $_SESSION['unit_add_open']){
+                            //     include 'addunit.php';
+
+                            // }
                             ?>
                         </div>
                         <div class="col-sm-2">
                             <?php  ?>
                         </div>
                     <?php
+
+
+                    } else if (!empty($_SESSION['unit_add_open']) && $_SESSION['unit_add_open']) {
+                    ?>
+                        <div class="col-sm-2">
+                            <?php  ?>
+                        </div>
+                        <div class="col">
+                            <?php
+                        include 'addunit.php';
+                            // }
+                            // else if(!empty($_SESSION['unit_add_open']) && $_SESSION['unit_add_open']){
+                            //     include 'addunit.php';
+
+                            // }
+                            ?>
+                        </div>
+                        <div class="col-sm-2">
+                            <?php  ?>
+                        </div>
+                    <?php
+
+
                     }
                     ?>
                 </div>
@@ -103,7 +131,9 @@ $_SESSION['page'] = '../course/course.php';
 
 
                 <?php
-                if (!empty($_SESSION['course_add_open']) && ($_SESSION['course_add_open'])) { } else {
+                if (!empty($_SESSION['course_add_open']) && ($_SESSION['course_add_open'])|| !empty($_SESSION['unit_add_open']) && $_SESSION['unit_add_open']) {
+                }
+                 else {
                     include "tablecourse.php";
                 }
                 ?>

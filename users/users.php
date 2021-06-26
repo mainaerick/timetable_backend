@@ -4,7 +4,10 @@
 include '../process/process.php';
 include '../logout/checklogin.php';
 check_login();
+
 ?>
+
+
 
 <head>
     <meta charset="UTF-8">
@@ -56,12 +59,12 @@ check_login();
                 </select>
             </form>
         </nav>
-        <table class="table table-sm table-bordered table-hover" id="user_table">
+        <table class="table table-sm table-striped table-hover" id="user_table">
             <thead class="thead-dark">
                 <tr>
-                    <th>User name</th>
-                    <th>Email</th>
-                    <th>Department</th>
+                    <th onclick="sortTable(0,'user_table')"><a href="#">User name</a></th>
+                    <th onclick="sortTable(1,'user_table')"><a href="#">Email</a></th>
+                    <th onclick="sortTable(2,'user_table')"><a href="#">Department</a></th>
                     <th>Status</th>
 
                 </tr>
@@ -74,56 +77,6 @@ check_login();
                     $i = 0;
                     while ($row = $datalist_lesson->fetch_assoc()) {
                         $i++;
-<<<<<<< Updated upstream
-                        ?>
-
-
-                <tr>
-                    <!-- number -->
-                    <td class="h6">
-                        <?php echo $i; ?>
-
-                    </td>
-
-                    <!-- name -->
-                    <td class="h6">
-                        <?php echo $row['username'] ?>
-                    </td>
-
-                    <!-- user email -->
-                    <td class="h6">
-                        <?php echo $row['email'] ?>
-                    </td>
-
-                    <!-- department -->
-                    <td class="h6">
-                        <?php echo $row['department'] ?>
-                    </td>
-
-                    <!-- status -->
-                    <td class="h6">
-                        <? 
-                        if($row['status']==="not approved"){?>
-                            <a href="../process/process.php?approve=<?php echo $row['id']; ?>"
-                            class="btn btn-sm btn-outline-primary">Approve</a>
-                        <?}
-                        else{
-                            ?>
-                            <a href="../process/process.php?dis_approve=<?php echo $row['id']; ?>"
-                            class="btn btn-sm btn-outline-primary">User Approved</a>
-                            <?
-                        }
-                        ?>
-                        
-                        
-                    </td>
-
-
-
-                    <!-- action -->
-                    <!-- <td class="h6">
-                        <a href="../course/course.php?edit_course=<?php echo $row['id']; ?>"
-=======
                 ?>
                         <tr>
                             <!-- name -->
@@ -138,20 +91,20 @@ check_login();
 
                             <!-- department -->
                             <td id="td-department" class="h6">
-                                <?php echo $row['department']; ?>
+                                <?php echo getdepbyid($db, $row['department']); ?>
                             </td>
 
                             <!-- status -->
                             <td class="h6">
                                 <?
-                                if ($row['status'] === "not approved") { 
-                                    ?>
+                                if ($row['status'] === "not approved") {
+                                ?>
                                     <a href="../process/process.php?approve=<?php echo $row['id'];
-                                    ?>&user_email=<? echo $row['email']; ?>&user_dep=<? echo str_replace("&", "%26", $row['department']);
-                                    ?>" class="btn btn-sm btn-outline-primary">Approve</a>
+                                                                            ?>&user_email=<? echo $row['email']; ?>&user_dep=<? echo str_replace("&", "%26", $row['department']);
+                                                                                                                                ?>" class="btn btn-sm btn-outline-primary">Approve</a>
                                 <? } else { ?>
-                                    <a href="../process/process.php?dis_approve=<?php echo $row['id']; 
-                                    ?>" class="btn btn-sm btn-outline-primary">User Approved</a>
+                                    <a href="../process/process.php?dis_approve=<?php echo $row['id'];
+                                                                                ?>" class="btn btn-sm btn-outline-primary">User Approved</a>
                                 <?
                                 }
                                 ?>
@@ -166,7 +119,6 @@ check_login();
                         <a href="../course/course.php?edit_course=<?php
                                                                     // echo $row['id']; 
                                                                     ?>"
->>>>>>> Stashed changes
                             class="btn btn-sm btn-outline-primary">Edit</a>
                         <a href="../process/process.php?delete_course=<?php
                                                                         //  echo $row['id']; 
@@ -223,6 +175,30 @@ check_login();
                 }
             }
         }
+
+        // function sendmail() {
+        //     var email=
+        //     $.ajax({
+        //         url: '../process/process.php.php?sendmail',
+        //         data: data,
+        //         type: 'POST',
+        //         success: function(data) {
+        //             // For Notification
+        //             document.getElementById("sendMailForm").reset();
+        //             var $alertDiv = $(".mailResponse");
+        //             $alertDiv.show();
+        //             $alertDiv.find('.alert').removeClass('alert-danger alert-success');
+        //             $alertDiv.find('.mailResponseText').text("");
+        //             if (data.error) {
+        //                 $alertDiv.find('.alert').addClass('alert-danger');
+        //                 $alertDiv.find('.mailResponseText').text(data.message);
+        //             } else {
+        //                 $alertDiv.find('.alert').addClass('alert-success');
+        //                 $alertDiv.find('.mailResponseText').text(data.message);
+        //             }
+        //         }
+        //     });
+        // }
     </script>
 
 
@@ -257,4 +233,5 @@ check_login();
     });
     </script> -->
 </body>
+
 </html>

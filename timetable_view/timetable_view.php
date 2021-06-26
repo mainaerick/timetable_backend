@@ -53,6 +53,7 @@ check_login();
                     <option value="year">year</option>
                     <option value="semester">semester</option>
                 </select>
+
             </form>
         </nav>
 
@@ -89,7 +90,7 @@ check_login();
 
                             <!-- department -->
                             <td class="h6">
-                                <?php echo $row['department'] ?>
+                                <?php echo getdepbyid($db, $row['department']) ?>
                             </td>
 
                             <td class="h6">

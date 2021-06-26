@@ -36,16 +36,16 @@
     <div class="">
 
         <table class="table table-sm table-bordered" id="table_exam">
-            <thead class="thead-dark">
+            <thead class="thead-light">
                 <tr>
-                    <th>NAME</th>
-                    <th>CODE</th>
-                    <th>COURSE</th>
-                    <th>SEMESTER</th>
-                    <th>SUPERVISOR</th>
-                    <th>DATE</th>
-                    <th>TIME</th>
-                    <th>ROOM</th>
+                    <th onclick=" sortTable(0,'table_exam')"><a href="#">NAME</a></th>
+                    <th onclick="sortTable(1,'table_exam')"><a href="#">CODE</a></th>
+                    <th onclick="sortTable(2,'table_exam')"><a href="#">COURSE</a></th>
+                    <th onclick="sortTable(3,'table_exam')"><a href="#">SEMESTER</a></th>
+                    <th onclick="sortTable(4,'table_exam')"><a href="#">SUPERVISOR</a></th>
+                    <th onclick="sortTable(5,'table_exam')"><a href="#">DATE</a></th>
+                    <th onclick="sortTable(6,'table_exam')"><a href="#">TIME</a></th>
+                    <th onclick="sortTable(7,'table_exam')"><a href="#">ROOM</a></th>
                     <th>ACTION</th>
 
                 </tr>
@@ -78,7 +78,7 @@
 
                             </td>
                             <!-- supervisor -->
-                            <td class="h6"><?php echo $row['supervisor']; ?>
+                            <td class="h6"><?php echo getlecbyid($db, $row['supervisor']); ?>
 
                             </td>
                             <!-- DATE -->
@@ -95,7 +95,7 @@
                             </td>
                             <!-- ACTION -->
                             <td class="d-flex">
-                                <a style="margin-right:5px;" href="../exams/exams.php?editexam=<?php echo $row['id']; ?>" class="btn btn-outline-primary">Edit</a>
+                                <a style="margin-right:5px;" href="../exams/exams.php?editexam=<?php echo $row['id']; ?>" class="btn btn-outline-primary">Edit/Adjust</a>
                                 <button class="btn btn-outline-primary btn_delete_exam" data-id="<?php echo $row['id']; ?>">Delete</button>
                             </td>
 

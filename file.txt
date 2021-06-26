@@ -9,5 +9,5 @@ In this example, the port number is 58821, but you will find that Visual Studio 
 
 For this example, then, the ngrok command would be:
 
-ngrok http -host-header="localhost:58821" 58821
+ngrok http -host-header="localhost:5000" 5000
 ngrok will start, and you'll see your app's new public URL.

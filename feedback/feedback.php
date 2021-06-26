@@ -29,6 +29,10 @@ $_SESSION['page'] = '../feedback/feedback.php';
 
     <?php
     include "../includes/nav.php";
+    if (isset($_GET['occupied'])) {
+        // alert($_GET['occupied']);
+        alert("sorry " . getlecbyid($db, $_GET['occupied']) . " will not be available at the swapped time");
+    }
     ?>
 
     <div class="d-flex" id="wrapper">
@@ -47,56 +51,95 @@ $_SESSION['page'] = '../feedback/feedback.php';
 
                     <div class="col">
                         <form class="col form-inline justify-content-end" style="margin-bottom: 1%;">
-                            <input id="search_exam" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search timetables">
+                            <input id="search_feedback" onkeyup="myFunction()" class="form-control mr-sm-2"
+                                type="search" placeholder="Search" aria-label="Search timetables">
                             <select class="custom-select my-2 my-sm-0" id="select_filter">
                                 <option selected>filter by</option>
-                                <option value="reg_no">reg-no</option>
-                                <option value="sent_date">sent date</option>
+                                <option value="content">content</option>
+                                <option value="email">email</option>
+                                <option value="sent_date">sent-date</option>
                                 <option value="res_date">resolved-date</option>
+
                             </select>
                         </form>
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="feedback_table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Content</th>
-                                    <th scope="col">Sender Reg. No.</th>
-                                    <th scope="col">Sent date</th>
-                                    <th scope="col">Resolved date</th>
+                                    <th onclick="sortTable(0,'feedback_table')" scope="col"><a href="#">Content</a></th>
+                                    <th onclick="sortTable(1,'feedback_table')" scope="col"><a href="#">Sender Email</a>
+                                    </th>
+                                    <th onclick="sortTable(2,'feedback_table')" scope="col"><a href="#">Sent date</a>
+                                    </th>
+                                    <th onclick="sortTable(3,'feedback_table')" scope="col"><a href="#">Resolved
+                                            date</a></th>
                                     <th scope="col">Option</th>
-
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $feedback_query = $db->query("select * from feedback;");
+                                $feedback_query = $db->query("select * from feedback WHERE department='". $_SESSION['ldep_name'] ."'");
                                 if (!empty($feedback_query)) {
 
                                     $i = 1;
                                     while ($row = $feedback_query->fetch_assoc()) {
                                         $i++;
                                         // echo $row['lesson_name'];
-
+                                    
                                 ?>
-                                        <tr>
-                                            <td><?php echo $row['content']; ?></td>
-                                            <td><?php echo $row['user_reg_no']; ?></td>
-                                            <td><?php echo $row['received_date']; ?></td>
-                                            <td><?php echo $row['reply_date']; ?></td>
+                                <tr>
+                                    <td><?php if ($row['feedback_type'] == "Swap") {
+                                                    echo getlecbyid($db, $row['sender_id']) . ' ' . $row['content'] . " " . getlecbyid($db, $row['buddy_id']);
+                                                } else {
+                                                    echo $row['content'];
+                                                } ?></td>
+                                    <td><?php echo getlecemailbyid($db, $row['sender_id']) ?></td>
+                                    <td><?php echo timestamptostr($row['received_date']); ?></td>
+                                    <td><?php echo $row['reply_date']; ?></td>
 
-                                            <td>
-                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Action
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Lesson TimeTable</a>
-                                                    <a class="dropdown-item" href="#">Exams TimeTable</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                </div>
-                                            </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <? if ($row['feedback_type'] === "Swap") {
+
+                                                    ?>
+                                            <a class="dropdown-item"
+                                                href="../process/process.php?resolvefeedback=<?
+                                                                                                                                echo $row['id'] .
+                                                                                                                                    "
+                                                &type=" . $row['feedback_type'] .
+                                                                                                                                    "
+                                                &senderid=" . $row['sender_id'] .
+                                                                                                                                    "
+                                                &lesson_id=" . $row['lesson_id'] .
+                                                                                                                                    "
+                                                &buddy_id=" . $row['buddy_id'] .
+                                                                                                                                    "
+                                                &buddylesson=" . $row['buddylesson_id']
+                                                                                                                                ?>
+                                                     ">Resolve</a>
+                                            <? } else if ($row['feedback_type'] === "timechange") { ?>
+                                            <a class="dropdown-item"
+                                                href="../process/process.php?resolvetimechange=<? echo $row['id'] ?>">
+
+                                                Resolve time
+                                            </a>
+
+                                            <? } else if ($row['feedback_type'] === "email") { ?>
+                                            <a class="dropdown-item"
+                                                href="../process/process.php?resolvetimechange=<? echo $row['id'] ?>">
+                                                Resolve email
+                                            </a>
+                                            <? } ?>
+
+                                            <a class="dropdown-item" href="#">Deny resolution</a>
+                                        </div>
+                                    </td>
 
 
-                                        </tr>
+                                </tr>
                                 <?php }
                                 } ?>
                             </tbody>
@@ -123,42 +166,42 @@ $_SESSION['page'] = '../feedback/feedback.php';
 
 
             <script>
-                function myFunction() {
-                    // Declare variables
-                    var input, filter, table, tr, td, i, txtValue, selected_value;
-                    input = document.getElementById("search");
-                    filter = input.value.toUpperCase();
-                    table = document.getElementById("user_table");
-                    tr = table.getElementsByTagName("tr");
-                    selected_value = document.getElementById("select_filter").value;
-                    // alert(selected_value);
-                    // Loop through all table rows, and hide those who don't match the search query
-                    for (i = 0; i < tr.length; i++) {
-                        if (selected_value == 'reg_no') {
-                            td = tr[i].getElementsByTagName("td")[1];
+            function myFunction() {
+                // Declare variables
+                var input, filter, table, tr, td, i, txtValue, selected_value;
+                input = document.getElementById("search_feedback");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("feedback_table");
+                tr = table.getElementsByTagName("tr");
+                selected_value = document.getElementById("select_filter").value;
+                // alert(selected_value);
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    if (selected_value == 'email') {
+                        td = tr[i].getElementsByTagName("td")[1];
 
-                        } else if (selected_value == 'sent_date') {
-                            td = tr[i].getElementsByTagName("td")[2];
+                    } else if (selected_value == 'sent_date') {
+                        td = tr[i].getElementsByTagName("td")[2];
 
-                        } else if (selected_value == 'res_date') {
-                            td = tr[i].getElementsByTagName("td")[3];
+                    } else if (selected_value == 'res_date') {
+                        td = tr[i].getElementsByTagName("td")[3];
 
+                    } else {
+                        td = tr[i].getElementsByTagName("td")[0];
+
+                    }
+                    // td = tr[i].getElementById("td-department")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        // alert(txtValue);
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
                         } else {
-                            td = tr[i].getElementsByTagName("td")[0];
-
-                        }
-                        // td = tr[i].getElementById("td-department")[0];
-                        if (td) {
-                            txtValue = td.textContent || td.innerText;
-                            // alert(txtValue);
-                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                tr[i].style.display = "";
-                            } else {
-                                tr[i].style.display = "none";
-                            }
+                            tr[i].style.display = "none";
                         }
                     }
                 }
+            }
             </script>
 </body>
 

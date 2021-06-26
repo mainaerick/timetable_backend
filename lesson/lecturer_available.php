@@ -11,34 +11,14 @@
 
 <body>
     <h6>Available lecturers</h6>
-    <table id="table_lessonl" class="w-100 table table-hover table-sm">
+    <table id="table_lec" class="w-100 table table-hover table-sm">
         <thead>
             <tr>
-                <th scope="col">Lecturer name</th>
-
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
             </tr>
         </thead>
         <tbody>
-            <?php if (empty($_SESSION['semester']) || empty($_SESSION['lcourse']) || empty($_SESSION['year'])) {
-            } else {
-                $dept = $_SESSION['ldep_name'];
-                $ltablecourse = $_SESSION['lcourse'];
-                $lyear = $_SESSION['year'];
-                $lsemester = $_SESSION['semester'];
-                $datalist_lesson = $db->query("select * from lecturer where department='$dept';");
-                if (!empty($datalist_lesson)) {
-                    while ($row = $datalist_lesson->fetch_assoc()) {
-            ?>
-
-
-                        <tr class="tr_lecavailable">
-                            <td class="lec_name"><?php echo $row['name']; ?></td>
-                        </tr>
-            <?php
-                    }
-                }
-            } ?>
-        </tbody>
     </table>
 
 

@@ -21,12 +21,12 @@ $_SESSION['page'] = '../exams/exams.php';
 ?>
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Exams</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
-  <!-- 
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Exams</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <!-- 
   <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css">
 
@@ -38,177 +38,216 @@ $_SESSION['page'] = '../exams/exams.php';
 
 <body>
 
-  <?php
+    <?php
   include "../includes/nav.php";
   ?>
 
-  <? if (isset($_GET['error'])) {
-  alert("invalid time input start time");
-  $error_msg = "invalid time start time is less than end time";
-  } elseif (isset($_GET['error_lecoccupied'])) {
-  $error_msg = "Lecturer will not be available at that particular time(" . $_GET['error_lecoccupied'] . ")";
-  } elseif (isset($_GET['error_roomoccupied'])) {
-  $error_msg = "Room will be occupied at that particular time (" . $_GET['error_roomoccupied'] . ")";
-  } elseif (isset($_GET['error_timeoccupied'])) {
-  $error_msg = "There will be an exam in progress at that particular time(" . $_GET['error_timeoccupied'] . ")";
+    <?php
+  if (!empty($_SESSION['e_saved_data'])) {
+    $editexamname = $_SESSION['e_saved_data'][0];
+    $editexamdate = $_SESSION['e_saved_data'][1];
+    $editexamsupervisor = $_SESSION['e_saved_data'][2];
+    $editexamfromtime = $_SESSION['e_saved_data'][3];
+    $editexamcode = $_SESSION['e_saved_data'][4];
+    $editexamcourse = $_SESSION['e_saved_data'][5];
+    $editexamsemester = $_SESSION['e_saved_data'][6];
+    $editexamroom = $_SESSION['e_saved_data'][7];
+    $editexamtotime = $_SESSION['e_saved_data'][8];
+    $editexamyear = $_SESSION['e_saved_data'][9];
+    $editexamsupervisor_reg = $_SESSION['e_saved_data'][10];
+    $exam_lecid = $_SESSION['e_saved_data'][11];
   }
 
+  if (isset($_GET['error'])) {
+    alert("invalid time input start time");
+    $error_msg = "invalid time start time is less than end time";
+  } elseif (isset($_GET['error_lecoccupied'])) {
+    $error_msg = "Lecturer will not be available at that particular time(" . $_GET['error_lecoccupied'] . ")";
+  } elseif (isset($_GET['error_roomoccupied'])) {
+    $error_msg = "Room will be occupied at that particular time (" . $_GET['error_roomoccupied'] . ")";
+  } elseif (isset($_GET['error_timeoccupied'])) {
+    $error_msg = "There will be an exam in progress at that particular time(" . $_GET['error_timeoccupied'] . ")";
+  }
+  // unset($_SESSION['e_saved_data']);
+
   ?>
-  <div class="d-flex" id="wrapper">
+    <div class="d-flex" id="wrapper">
 
-    <!-- Sidebar -->
-    <?php include "../includes/sidebar.php" ?>
-    <!-- /#sidebar-wrapper -->
+        <!-- Sidebar -->
+        <?php include "../includes/sidebar.php" ?>
+        <!-- /#sidebar-wrapper -->
 
-    <? if (isset($_GET['error'])) {
+        <? if (isset($_GET['error'])) {
       alert("invalid time input start time");
     } ?>
-    <!-- Page Content -->
-    <div id="page-content-wrapper" style="padding: 0%; margin-left: 10%; margin-top: 0%;">
+        <!-- Page Content -->
+        <div id="page-content-wrapper" style="padding: 0%; margin-left: 10%; margin-top: 0%;">
 
-      <div class="">
-        <div class="page-content-wrapper container" style="padding: 0%;  margin-top: 3%;">
-          <h3>Exams TimeTable</h3>
-          <hr>
+            <div class="">
+                <div class="container page-content-wrapper" style="padding: 0%;  margin-top: 3%;">
+                    <div class="row">
+                        <div class="col">
+                            <h3>Exams TimeTable</h3>
+                        </div>
+                        <div class="col">
+                            <div class="col d-flex flex-row justify-content-end">
+                                <div class="dropdown" style="margin-right:5px; margin-bottom: 5px;">
+                                    <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <!-- dropdown header-->
+                                        <?php
+                    if (empty($_SESSION['lcourse'])) {
+                      echo "Select course";
+                    } else {
+                      echo $_SESSION['lcourse'];
+                    } ?>
 
-          <div class="row">
-            <div class="col">
-              <?php
+
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <?php
+                    $dept = $_SESSION['ldep_name'];
+                    if (!empty($_SESSION['lcourse'])) {
+                      $ltablecourse = $_SESSION['lcourse'];
+                    } else {
+                      $ltablecourse = '';
+                    }
+
+
+                    $lesson_course = $db->query("select * from courses where department='$dept';");
+                    while ($row = $lesson_course->fetch_assoc()) {  ?>
+
+                                        <a class="dropdown-item"
+                                            href="../process/process.php?select_course=<?php echo $row['course_name']; ?>"><?php echo $row['course_name'] ?></a>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <!-- button select year -->
+                                <div class="dropdown" style="margin-right:5px; margin-bottom: 5px;">
+                                    <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <?php if (empty($_SESSION['lcourse']) || empty($_SESSION['year'])) {
+                      echo "Select year";
+                    } else {
+
+                      echo $_SESSION['year'];
+                    }; ?>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+
+                                        <?php if (!empty($_SESSION['year'])) {
+                      $lyear = $_SESSION['year'];
+                    } else {
+                      $lyear = '';
+                    } ?>
+                                        <a class="dropdown-item" href="../process/process.php?yearone">Year 1</a>
+                                        <a class="dropdown-item" href="../process/process.php?yeartwo">Year 2</a>
+                                        <a class="dropdown-item" href="../process/process.php?yearthree">Year 3</a>
+                                        <a class="dropdown-item" href="../process/process.php?yearfour">Year 4</a>
+                                        <a class="dropdown-item" href="../process/process.php?yearfive">Year 5</a>
+                                        <a class="dropdown-item" href="../process/process.php?yearsix">Year 6</a>
+
+                                    </div>
+                                </div>
+                                <div class="dropdown" style=" margin-bottom: 5px;">
+                                    <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <?php if (empty($_SESSION['semester']) || empty($_SESSION['lcourse']) || empty($_SESSION['year'])) {
+                      echo "Select sem";
+                    } else {
+
+                      echo $_SESSION['semester'];
+                    }; ?>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+
+                                        <?php if (!empty($_SESSION['semester'])) {
+                      $lsemester = $_SESSION['semester'];
+                    } else {
+                      $lsemester = '';
+                    } ?>
+                                        <a class="dropdown-item" href="../process/process.php?semone">Semester 1</a>
+                                        <a class="dropdown-item" href="../process/process.php?semtwo">Semester 2</a>
+                                        <a class="dropdown-item" href="../process/process.php?semthree">Semester
+                                            3</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col">
+                            <?php
               // show add exam button
               if (empty($_SESSION['exam_add_open']))
               // isset($_GET['addexam']) || isset($_GET['editexam']) || isset($_GET['saved']) 
               {
               ?>
-                <a href="../process/process.php?addexam" class="btn btn-outline-primary btn-sm">Add Exam</a>
-              <?php } ?>
+                            <a href="../process/process.php?addexam" class="btn btn-outline-primary btn-sm">Add
+                                Exam</a>
+                            <?php } ?>
 
-            </div>
-
-            <div class="col d-flex flex-row justify-content-end">
-              <div class="dropdown" style="margin-right:5px; margin-bottom: 5px;">
-                <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <!-- dropdown header-->
-                  <?php
-                  if (empty($_SESSION['lcourse'])) {
-                    echo "Select course";
-                  } else {
-                    echo $_SESSION['lcourse'];
-                  } ?>
+                        </div>
 
 
-                </a>
+                    </div>
 
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <?php
-                  $dept = $_SESSION['ldep_name'];
-                  if (!empty($_SESSION['lcourse'])) {
-                    $ltablecourse = $_SESSION['lcourse'];
-                  } else {
-                    $ltablecourse = '';
-                  }
+                    <hr>
 
+                    <!-- inputs start -->
+                    <div class="row">
 
-                  $lesson_course = $db->query("select * from courses where department='$dept';");
-                  while ($row = $lesson_course->fetch_assoc()) {  ?>
-
-                    <a class="dropdown-item" href="../process/process.php?select_course=<?php echo $row['course_name']; ?>"><?php echo $row['course_name'] ?></a>
-                  <?php } ?>
-                </div>
-              </div>
-              <!-- button select year -->
-              <div class="dropdown" style="margin-right:5px; margin-bottom: 5px;">
-                <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <?php if (empty($_SESSION['lcourse']) || empty($_SESSION['year'])) {
-                    echo "Select year";
-                  } else {
-
-                    echo $_SESSION['year'];
-                  }; ?>
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-
-                  <?php if (!empty($_SESSION['year'])) {
-                    $lyear = $_SESSION['year'];
-                  } else {
-                    $lyear = '';
-                  } ?>
-                  <a class="dropdown-item" href="../process/process.php?yearone">Year 1</a>
-                  <a class="dropdown-item" href="../process/process.php?yeartwo">Year 2</a>
-                  <a class="dropdown-item" href="../process/process.php?yearthree">Year 3</a>
-                  <a class="dropdown-item" href="../process/process.php?yearfour">Year 4</a>
-                  <a class="dropdown-item" href="../process/process.php?yearfive">Year 5</a>
-                  <a class="dropdown-item" href="../process/process.php?yearsix">Year 6</a>
-
-                </div>
-              </div>
-              <div class="dropdown" style=" margin-bottom: 5px;">
-                <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <?php if (empty($_SESSION['semester']) || empty($_SESSION['lcourse']) || empty($_SESSION['year'])) {
-                    echo "Select sem";
-                  } else {
-
-                    echo $_SESSION['semester'];
-                  }; ?>
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-
-                  <?php if (!empty($_SESSION['semester'])) {
-                    $lsemester = $_SESSION['semester'];
-                  } else {
-                    $lsemester = '';
-                  } ?>
-                  <a class="dropdown-item" href="../process/process.php?semone">Semester 1</a>
-                  <a class="dropdown-item" href="../process/process.php?semtwo">Semester 2</a>
-                  <a class="dropdown-item" href="../process/process.php?semthree">Semester 3</a>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <hr>
-
-          <!-- inputs start -->
-          <div class="row">
-
-            <?php
+                        <?php
 
             if (!empty($_SESSION['exam_add_open']) && $_SESSION['exam_add_open'])
             // isset($_GET['addexam']) || isset($_GET['editexam']) || isset($_GET['saved']) 
             {
             ?>
-              <div class="col">
-                <?php
+                        <div class="col">
+                            <?php
                 include "addexam.php";
                 ?>
-              </div>
-              <div class="col-sm-4">
-                <?php include "exam_course.php"; ?>
-              </div>
-            <?php }
-            ?>
-          </div>
+                        </div>
+                        <div class="col-sm" id="side_view">
+                            <?php include "exam_course.php"; ?>
+                        </div>
+                        <?php
+              // include '../lesson/roomsavail.php';
+              ?>
+                    </div>
+                    <?php }
+        ?>
+                </div>
 
-          <!-- input end -->
+                <!-- input end -->
 
-          <!-- table zone -->
+                <!-- table zone -->
 
-          <?php
-          if (!empty($_SESSION['exam_add_open']) && $_SESSION['exam_add_open'])
-          // isset($_GET['addexam']) || isset($_GET['editexam']) || isset($_GET['saved']) 
-          {
+                <?php
+        if (!empty($_SESSION['exam_add_open']) && $_SESSION['exam_add_open'])
+        // isset($_GET['addexam']) || isset($_GET['editexam']) || isset($_GET['saved']) 
+        {
+        } else {
+          if (isset($_GET['printexam'])) {
+            include "printexam.php";
           } else {
             include "exam_table.php";
           }
-          ?>
+        }
+        ?>
 
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#page-content-wrapper -->
 </body>
 
 

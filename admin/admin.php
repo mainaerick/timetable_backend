@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?
-include '../process/process.php'; 
+include '../process/process.php';
 include '../logout/checklogin.php';
 
 check_login(); ?>
@@ -45,60 +45,19 @@ check_login(); ?>
                 <hr>
 
 
-                
-
-                <div class="row justify-content-center">
-
-                <div class="col-sm-4 mt-4">
+                <div class="col-sm-12 mt-4">
                     <div class="card">
 
                         <div class="card-block">
-                            <h4 class="card-title mt-3">TimeTables</h4>
-                            <div class="meta">
-                                <a>Admin</a>
-                            </div>
-                            <div class="card-text">
-                                click to view all timetables
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <small>
-                            <?  $result = $db->query("select * from timetables"); echo $result->num_rows ?>
-                             Timetables available</small>
-                            <a href="../timetable_view/timetable_view.php" class="btn btn-secondary float-right btn-sm">Manage</a>
-                        </div>
-                    </div>
-                </div>
-                    <div class="col-sm-4 mt-4">
-                    <div class="card">
-
-                        <div class="card-block">
-                            <h4 class="card-title mt-3">Departments</h4>
-                            <div class="meta">
-                                <a>Admin</a>
-                            </div>
-                            <div class="card-text">
-                                click show for more details
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <small>
-                                <?  $result = $db->query("select * from department"); echo $result->num_rows ?> Department available</small>
-                            <!-- <a class="btn btn-secondary float-right btn-sm">manage</button> -->
-                            <a class="btn btn-secondary float-right btn-sm" href="../department/department.php">manage</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-4 mt-4">
-                    <div class="card">
-
-                        <div class="card-block">
-                            <h4 class="card-title mt-3">Users</h4>
+                            <h4 class="card-title mt-3">School Timetable</h4>
                             <div class="meta">
                                 <!-- SUB TITLE -->
-                                <a style="color:crimson;">
-                                <? $result = $db->query("select * from users where status= 'not approved'"); echo $result->num_rows ?> Request</a>
+                                <a href="print_schooltimetable.php" style="color:crimson;">
+                                    Class Timetable</a><br>
+                                <a href="print_schooltimetable.php?getallexam" style="color:crimson;">
+                                    Exam Timetable</a><br>
+                                <a href="#" style="color:crimson;">
+                                    all courses</a>
                             </div>
                             <div class="card-text">
                                 click show for more details
@@ -108,31 +67,123 @@ check_login(); ?>
                         <!-- request SHOWING -->
                         <div class="card-footer">
                             <small>
-                            <? $result = $db->query("select * from users where status= 'approved'"); echo $result->num_rows ?> Users available
-                                </small>
+
+                            </small>
                             <!-- <a class="btn btn-secondary float-right btn-sm">manage</button> -->
-                            <a href="../users/users.php" class="btn btn-secondary float-right btn-sm">manage</a>
                         </div>
                     </div>
                 </div>
 
-            </div>
+                <div class="row justify-content-center">
 
-            <div class="col d-flex flex-row justify-content-end">
+                    <div class="col-sm-4 mt-4">
+                        <div class="card">
+
+                            <div class="card-block">
+                                <h4 class="card-title mt-3">Department TimeTables</h4>
+                                <div class="meta">
+                                    <a>Admin</a>
+                                </div>
+                                <div class="card-text">
+                                    click to view all timetables
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <small>
+                                    <? $result = $db->query("select * from timetables");
+                                    echo $result->num_rows ?>
+                                    Timetables available</small>
+                                <a href="../timetable_view/timetable_view.php" class="btn btn-secondary float-right btn-sm">Manage</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 mt-4">
+                        <div class="card">
+
+                            <div class="card-block">
+                                <h4 class="card-title mt-3">Departments</h4>
+                                <div class="meta">
+                                    <a>Admin</a>
+                                </div>
+                                <div class="card-text">
+                                    click show for more details
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <small>
+                                    <? $result = $db->query("select * from department");
+                                    echo $result->num_rows ?> Department available</small>
+                                <!-- <a class="btn btn-secondary float-right btn-sm">manage</button> -->
+                                <a class="btn btn-secondary float-right btn-sm" href="../department/department.php">manage</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 mt-4">
+                        <div class="card">
+
+                            <div class="card-block">
+                                <h4 class="card-title mt-3">Users</h4>
+                                <div class="meta">
+                                    <!-- SUB TITLE -->
+                                    <a style="color:crimson;">
+                                        <? $result = $db->query("select * from users where status= 'not approved'");
+                                        echo $result->num_rows ?> Request</a>
+                                </div>
+                                <div class="card-text">
+                                    click show for more details
+                                </div>
+                            </div>
+
+                            <!-- request SHOWING -->
+                            <div class="card-footer">
+                                <small>
+                                    <? $result = $db->query("select * from users where status= 'approved'");
+                                    echo $result->num_rows ?> Users available
+                                </small>
+                                <!-- <a class="btn btn-secondary float-right btn-sm">manage</button> -->
+                                <a href="../users/users.php" class="btn btn-secondary float-right btn-sm">manage</a>
+                            </div>
+                        </div>
+                    </div>
 
 
-                <hr>
 
-                <!-- inputs start -->
-                <div class="row">
+                    <!-- <div class="col-sm-4 mt-4">
+                        <div class="card">
 
+                            <div class="card-block">
+                                <h4 class="card-title mt-3">Schoool TimeTable</h4>
+                                <div class="meta">
+                                    <a>Admin</a>
+                                </div>
+                                <div class="card-text">
+                                    click to view all timetables
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="print_schooltimetable.php" class="btn btn-secondary float-left btn-sm">Class Timetable</a>
+
+                                <a href="print_schooltimetable.php?getallexam" class="btn btn-secondary float-right btn-sm">Exam Timetable</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col d-flex flex-row justify-content-end">
+
+
+                    <hr>
+
+                    <!-- inputs start -->
+                    <div class="row">
+
+
+                    </div>
 
                 </div>
 
             </div>
-
-        </div>
-        <!-- /#page-content-wrapper -->
+            <!-- /#page-content-wrapper -->
 </body>
 
 

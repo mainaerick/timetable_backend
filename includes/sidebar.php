@@ -10,9 +10,12 @@
 
 <body>
     <!-- Sidebar -->
+    <?php
+    // include "../includes/nav.php";
+    ?>
     <div class="bg-dark border-right position-fixed" id="sidebar-wrapper">
         <div class="list-group list-group-flush">
-            <a style="padding: 18%; color: #fff;" href="../lesson/lesson.php" class="list-group-item list-group-item-action bg-dark">Class TimeTable</a>
+            <a style="padding-bottom: 18%; padding-top: 18%; color: #fff;" href="../lesson/lesson.php" class="list-group-item list-group-item-action bg-dark">Class TimeTable</a>
             <!-- <a href="#homeSubmenu" class="list-group-item list-group-item-action bg-light" data-toggle="collapse"
                 aria-expanded="false" class="dropdown-toggle">Home</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -31,15 +34,11 @@
 
 
             </ul> -->
-            <a href="../exams/exams.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Exam Timetables</a>
-            <a href="../course/course.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Courses</a>
-<<<<<<< Updated upstream
-            <a href="../lecturers/lecturer.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Lecturer</a>
-=======
-            <a href="../lecturers/lecturer.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Lecturers</a>
->>>>>>> Stashed changes
+            <a href="../exams/exams.php" style="padding-bottom: 18%; padding-top: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Exam Timetables</a>
+            <a href="../course/course.php" style="padding-bottom: 18%; padding-top: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Courses</a>
+            <a href="../lecturers/lecturer.php" style="padding-bottom: 18%; padding-top: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Lecturer</a>
 
-            <a href="../feedback/feedback.php" style="padding: 18%; color: #fff;" class="list-group-item list-group-item-action bg-dark">Feedbacks</a>
+            <!-- <a href="../feedback/feedback.php" style="padding-bottom: 18%; padding-top: 18%;color: #fff;" class="list-group-item list-group-item-action bg-dark">Feedbacks</a> -->
 
 
         </div>

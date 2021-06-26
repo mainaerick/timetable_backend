@@ -40,7 +40,7 @@
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
-        <div id="page-content-wrapper" style="padding: 0%; margin-left: 10%; margin-top: 0%;">
+        <div id="page-content-wrapper" style="padding: 0%; margin-left: 0%; margin-top: 0%;">
 
             <div class="">
                 <div class="page-content-wrapper container" style="padding: 0%;  margin-top: 3%;">
@@ -48,19 +48,19 @@
 
                     <div class="col">
                         <form class="col form-inline justify-content-end" style="margin-bottom: 1%;">
-                            <input id="search_exam" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search timetables">
+                            <input id="search_room" onkeyup="roommyFunction()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search timetables">
                             <select class="custom-select my-2 my-sm-0" id="select_filter">
                                 <option selected>filter by</option>
-                                <option value="reg_no">reg-no</option>
-                                <option value="sent_date">sent date</option>
-                                <option value="res_date">resolved-date</option>
+                                <option value="name">room name</option>
+                                <option value="capacity">room capacity</option>
+
                             </select>
                         </form>
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="table_room">
                             <thead>
                                 <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Capacity</th>
+                                    <th onclick="sortTable(0,'table_room')" scope="col"><a href="#">Name</a></th>
+                                    <th onclick="sortTable(1,'table_room')" scope="col"><a href="#">Capacity</a></th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -84,7 +84,7 @@
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="../room/room.php?edit_room=<? echo $row['id']; ?>">Edit</a>
-                                                    <a class="dropdown-item" href="../process/process.php?delete_room=<? echo $row['id'];?>">Delete</a>
+                                                    <a class="dropdown-item" href="../process/process.php?delete_room=<? echo $row['id']; ?>">Delete</a>
                                                 </div>
                                             </td>
 
@@ -115,25 +115,19 @@
 
 
             <script>
-                function myFunction() {
+                function roommyFunction() {
                     // Declare variables
                     var input, filter, table, tr, td, i, txtValue, selected_value;
-                    input = document.getElementById("search");
+                    input = document.getElementById("search_room");
                     filter = input.value.toUpperCase();
-                    table = document.getElementById("user_table");
+                    table = document.getElementById("table_room");
                     tr = table.getElementsByTagName("tr");
                     selected_value = document.getElementById("select_filter").value;
                     // alert(selected_value);
                     // Loop through all table rows, and hide those who don't match the search query
                     for (i = 0; i < tr.length; i++) {
-                        if (selected_value == 'reg_no') {
+                        if (selected_value == 'capacity') {
                             td = tr[i].getElementsByTagName("td")[1];
-
-                        } else if (selected_value == 'sent_date') {
-                            td = tr[i].getElementsByTagName("td")[2];
-
-                        } else if (selected_value == 'res_date') {
-                            td = tr[i].getElementsByTagName("td")[3];
 
                         } else {
                             td = tr[i].getElementsByTagName("td")[0];

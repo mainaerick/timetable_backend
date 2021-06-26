@@ -2,6 +2,7 @@
 <html lang="en">
 <?php
 include "../process/process.php";
+$_SESSION['page'] = '../department/department.php';
 
 ?>
 
@@ -13,110 +14,98 @@ include "../process/process.php";
 </head>
 
 <body>
+    <?php include "../includes/nav.php"; ?>
 
 
 
-    <?php
-    // if (isset($_GET['addlesson']) || isset($_GET['edit']) || isset($_GET['saved'])) {
+    <div class="d-flex" id="wrapper">
+        <?php
+        // if (isset($_GET['addlesson']) || isset($_GET['edit']) || isset($_GET['saved'])) {
 
-    // }
-    // else{
-    include "../includes/nav.php";
+        // }
+        // else{
+        include "../includes/sidebar_admin.php";
 
-    include "../includes/sidebar_admin.php";
+        // }
+        ?>
 
-    // }
-    ?>
+        <!-- Page Content -->
 
-    <div class="container" style="margin-top: 3%;">
 
-        <nav class="navbar navbar-light bg-light">
-            <form class="form-inline">
-                <input id="search_department_name" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search department name" aria-label="Search department name">
-            </form>
-        </nav>
-        <? if (isset($_GET['edit_dep'])) {
-            include "./adddepartment.php";
-        } ?>
+        <div id="page-content-wrapper" style="padding: 0%; margin-left: 10%; margin-top: 0%;">
+            <div class="container page-content-wrapper">
 
-        <table class="table table-sm table-bordered" id="dep_table">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Department name</th>
-                    <th>Users</th>
-                    <th>action</th>
+                <h3>Manage Departments</h3>
+                <hr>
+                <div class="row">
 
-                </tr>
-            </thead>
-            <tbody>
+                    <div class="col">
+                        <!-- <button id="addlbtn" class=" btn btn-outline-primary btn-sm">Add Lesson</button> -->
+                        <?php
+                        if (empty($_SESSION['dep_add_open'])) {
+                            // isset($_GET['addlesson']) || isset($_GET['edit']) ||
+
+                        ?>
+                            <a id="adddbtn" href="../process/process.php?adddep" type="hidden" class="btn btn-outline-primary btn-sm">Add Department</a>
+
+                        <?php }
+                        ?>
+                    </div>
+                </div>
+
+
+
+                <div class="row justify-content-center">
+
+                    <?php
+                    if (!empty($_SESSION['dep_add_open']) && $_SESSION['dep_add_open']) {
+                        // isset($_GET['addlesson']) || isset($_GET['edit']) ||
+
+                    ?>
+                        <div class="col-sm-2">
+                            <?php  ?>
+                        </div>
+                        <div class="col">
+                            <?php
+                            include 'adddepartment.php';
+                            ?>
+                        </div>
+                        <div class="col-sm-2">
+                            <?php  ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+                <!-- input end -->
+
+                <!-- hide and unhide add lesson button -->
+
+
+                <!-- buttton select course and year -->
+
+
+
+
+                <!-- TABLE -->
+
 
                 <?php
-                $results_per_page = 10;
-                if (isset($_GET["page"])) {
-                    $page  = $_GET["page"];
+                if (!empty($_SESSION['dep_add_open']) && ($_SESSION['dep_add_open'])) {
                 } else {
-                    $page = 1;
-                };
-                $start_from = ($page - 1) * $results_per_page;
+                    include "table_dep.php"; ?>
 
-
-
-                $datalist_lesson = $db->query("select * from department ORDER BY name ASC LIMIT $start_from, $results_per_page")  or die($db->error);
-
-                if (!empty($datalist_lesson)) {
-                    $i = 0;
-                    while ($row = $datalist_lesson->fetch_assoc()) {
-                        $i++;
+                <? }
                 ?>
 
+                <!-- TABLE END -->
+            </div>
+            <!-- /#page-content-wrapper -->
 
-                        <tr>
+        </div>
 
-
-                            <!-- name -->
-                            <td class="h6">
-                                <?php echo $row['name'] ?>
-                            </td>
-
-                            <!-- user email -->
-                            <td class="h6">
-
-                                <?php
-                                $d_name = $row['name'];
-                                $result = $db->query("select * from users where department= '$d_name'");
-                                echo $result->num_rows ?>
-                            </td>
-                            <td class="h6">
-                                <a href="../department/department.php?edit_dep=<?php echo $row['name']; ?>" class="btn btn-sm btn-outline-primary">Edit</a>
-                            </td>
-
-                            <!-- action -->
-                            <!-- <td class="h6">
-                        <a href="../course/course.php?edit_course=<?php echo $row['id']; ?>"
-                            class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a href="../process/process.php?delete_course=<?php echo $row['id']; ?>"
-                            class="btn btn-sm btn-outline-primary">Delete</a>
-                    </td> -->
-
-                        </tr>
-                <?php
-                        $sql = "SELECT COUNT(ID) AS total FROM department";
-                        $result = $db->query("SELECT COUNT(ID) AS total FROM department")  or die($db->error);
-                        $row = $result->fetch_assoc();
-                        $total_pages = ceil($row["total"] / $results_per_page);
-                        // $total_pages = ceil($total_pages / $results_per_page); 
-
-                    }
-                } ?>
-
-            </tbody>
-
-        </table>
-        <? for ($i = 1; $i <= $total_pages; $i++) {
-
-            echo "<a class='list-inline-item active' href='./department.php?page=" . $i . "'>" . $i . "</a> ";
-        }; ?>
     </div>
+
 
 
     <script>
@@ -130,7 +119,7 @@ include "../process/process.php";
             // alert(selected_value);
             // Loop through all table rows, and hide those who don't match the search query
             for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
+                td = tr[i].getElementsByTagName("td")[1];
                 // td = tr[i].getElementById("td-department")[0];
                 if (td) {
                     txtValue = td.textContent || td.innerText;

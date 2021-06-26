@@ -34,40 +34,40 @@
     <div class="d-flex" id="wrapper">
 
         <!-- Sidebar -->
-        <?php 
+        <?php
         // include "../includes/sidebar.php"
-         ?>
+        ?>
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
-        <div id="page-content-wrapper" style="padding: 0%; margin-left: 10%; margin-top: 0%;">
+        <div id="page-content-wrapper" style="padding: 0%;  margin-top: 0%;">
 
             <div class="">
                 <div class="page-content-wrapper container" style="padding: 0%;  margin-top: 3%;">
-                    <hr>
 
                     <div class="col">
                         <form class="col form-inline justify-content-end" style="margin-bottom: 1%;">
-                            <input id="search_exam" onkeyup="myFunction()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search timetables">
+                            <input id="searchlecturer" onkeyup="myFunction()" class="form-control mr-sm-2" type="search"
+                                placeholder="Search" aria-label="Search timetables">
                             <select class="custom-select my-2 my-sm-0" id="select_filter">
                                 <option selected>filter by</option>
-                                <option value="reg_no">reg-no</option>
-                                <option value="sent_date">sent date</option>
-                                <option value="res_date">resolved-date</option>
+                                <option value="name">name</option>
+
+                                <option value="email">email</option>
                             </select>
                         </form>
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="lec_table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Reg. No.</th>
-                                    <th scope="col">Email</th>
+                                    <th onclick=" sortTable(0,'lec_table')" scope="col"><a href="#">Name</a></th>
+                                    <th onclick=" sortTable(1,'lec_table')" scope="col"><a href="#">Email</a></th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $feedback_query = $db->query("select * from lecturer;");
+                                // $dep_id=$_SESSION['ldep_name'];
+                                $feedback_query = $db->query("select * from lecturer where department='".$_SESSION['ldep_name']."';");
                                 if (!empty($feedback_query)) {
 
                                     $i = 1;
@@ -76,25 +76,18 @@
                                         // echo $row['lesson_name'];
 
                                 ?>
-                                        <tr>
-                                            <td><?php echo $row['name']; ?></td>
-                                            <td><?php echo $row['reg_no']; ?></td>
-                                            <td><?php echo $row['email']; ?></td>
+                                <tr>
+                                    <td><?php echo $row['name']; ?></td>
+                                    <td><?php echo $row['email']; ?></td>
 
-                                            <td>
-                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Action
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="../process/process.php?notify_lecturer">Notify</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="../lecturers/lecturer.php?edit_lecturer=<?echo $row['id']?>">Edit</a>
-                                                    <a class="dropdown-item" href="../process/process.php?delete_lecturer">Delete</a>
-                                                </div>
-                                            </td>
+                                    <td>
+                                    <a class="dropdown-item"
+                                                href="../lecturers/lecturer.php?edit_lecturer=<? echo $row['id'] ?>">Edit</a>
+                                        
+                                    </td>
 
 
-                                        </tr>
+                                </tr>
                                 <?php }
                                 } ?>
                             </tbody>
@@ -105,7 +98,6 @@
                     <div class="col d-flex flex-row justify-content-end">
 
 
-                        <hr>
 
                         <!-- inputs start -->
                         <div class="row">
@@ -121,42 +113,36 @@
 
 
             <script>
-                function myFunction() {
-                    // Declare variables
-                    var input, filter, table, tr, td, i, txtValue, selected_value;
-                    input = document.getElementById("search");
-                    filter = input.value.toUpperCase();
-                    table = document.getElementById("user_table");
-                    tr = table.getElementsByTagName("tr");
-                    selected_value = document.getElementById("select_filter").value;
-                    // alert(selected_value);
-                    // Loop through all table rows, and hide those who don't match the search query
-                    for (i = 0; i < tr.length; i++) {
-                        if (selected_value == 'reg_no') {
-                            td = tr[i].getElementsByTagName("td")[1];
+            function myFunction() {
+                // Declare variables
+                var input, filter, table, tr, td, i, txtValue, selected_value;
+                input = document.getElementById("searchlecturer");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("lec_table");
+                tr = table.getElementsByTagName("tr");
+                selected_value = document.getElementById("select_filter").value;
+                // alert(selected_value);
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    if (selected_value == 'email') {
+                        td = tr[i].getElementsByTagName("td")[1];
 
-                        } else if (selected_value == 'sent_date') {
-                            td = tr[i].getElementsByTagName("td")[2];
+                    } else {
+                        td = tr[i].getElementsByTagName("td")[0];
 
-                        } else if (selected_value == 'res_date') {
-                            td = tr[i].getElementsByTagName("td")[3];
-
+                    }
+                    // td = tr[i].getElementById("td-department")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        // alert(txtValue);
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
                         } else {
-                            td = tr[i].getElementsByTagName("td")[0];
-
-                        }
-                        // td = tr[i].getElementById("td-department")[0];
-                        if (td) {
-                            txtValue = td.textContent || td.innerText;
-                            // alert(txtValue);
-                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                tr[i].style.display = "";
-                            } else {
-                                tr[i].style.display = "none";
-                            }
+                            tr[i].style.display = "none";
                         }
                     }
                 }
+            }
             </script>
 </body>
 

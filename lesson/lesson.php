@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-include '../process/process.php';
+require_once '../process/process.php';
 include '../logout/checklogin.php';
 check_login();
 $_SESSION['page'] = '../lesson/lesson.php';
@@ -42,13 +42,17 @@ $_SESSION['page'] = '../lesson/lesson.php';
 
 </head>
 
+
 <body>
+
+
     <?php
     include "../includes/nav.php";
+
+
     ?>
-
-
     <div class="d-flex" id="wrapper">
+
         <?php
         // if (isset($_GET['addlesson']) || isset($_GET['edit']) || isset($_GET['saved'])) {
 
@@ -58,7 +62,24 @@ $_SESSION['page'] = '../lesson/lesson.php';
 
         // }
         ?>
-        <? if (isset($_GET['error'])) {
+        <?php
+        if (!empty($_SESSION['lsaveddata'])) {
+            $editlessonname = $_SESSION['lsaveddata'][0];
+            $editfragment = $_SESSION['lsaveddata'][1];
+            $editlecturer = $_SESSION['lsaveddata'][2];
+            $editroom = $_SESSION['lsaveddata'][3];
+            $editfromtime = $_SESSION['lsaveddata'][4];
+            $edittotime = $_SESSION['lsaveddata'][5];
+            $editlessoncode = $_SESSION['lsaveddata'][6];
+            $editlessoncourse = $_SESSION['lsaveddata'][7];
+            $editlessonsemester = $_SESSION['lsaveddata'][8];
+            $editlessonyear = $_SESSION['lsaveddata'][9];
+            $editlec_reg = $_SESSION['lsaveddata'][10];
+            $edit_stdno = $_SESSION['lsaveddata'][11];
+            unset($_SESSION['lsaveddata']);
+        }
+
+        if (isset($_GET['error'])) {
             // alert("invalid time input start time");
             $error_msg = "invalid time start time is less than end time";
         } elseif (isset($_GET['error_lecoccupied'])) {
@@ -67,6 +88,10 @@ $_SESSION['page'] = '../lesson/lesson.php';
             $error_msg = "Room will be occupied at that particular time (" . $_GET['error_roomoccupied'] . ")";
         } elseif (isset($_GET['error_timeoccupied'])) {
             $error_msg = "There will be a lesson in progress at that particular time(" . $_GET['error_timeoccupied'] . ")";
+        } elseif (isset($_GET['hour_exceed'])) {
+            $error_msg = "Lecture has reached its maximum teaching hours";
+        } elseif (isset($_GET['lesson_exist_not'])) {
+            $error_msg = "Unit does not exist";
         }
 
         ?>
@@ -76,35 +101,10 @@ $_SESSION['page'] = '../lesson/lesson.php';
 
         <div id="page-content-wrapper" style="padding: 0%; margin-left: 10%; margin-top: 0%;">
 
-
             <div class="container page-content-wrapper" style="padding: 0%;  margin-top: 3%;">
-                <div class="d-flex col justify-content-center">
-                    <!-- <button type="button" class="btn btn-outline-secondary"></button> -->
 
-
-                    <?php
-                    if (empty($_SESSION['ldep_name'])) {
-                        echo '<h5><span class="badge badge-pill badge-secondary">' . "Please select a department" . '</span></h5>';
-                    } else {
-                        echo '<h5><span class="badge badge-pill badge-secondary">' . $_SESSION['ldep_name'] . '</span></h5>';
-                    } ?>
-
-
-
-                </div>
-                <div class="d-flex col justify-content-center">
-                    <?php
-                    if (empty($_SESSION['lcourse'])) {
-                    } else {
-                        echo '<h4>' . $_SESSION['lcourse'] . ' TIMETABLE</h4>';
-                    } ?>
-
-                    <h4> </h4>
-
-                </div>
 
                 <!-- Search form -->
-
 
                 <div class="search_result d-flex col">
                     <div class="result row"></div>
@@ -118,28 +118,17 @@ $_SESSION['page'] = '../lesson/lesson.php';
                 </div>
 
 
-
                 <!-- <p class="d-flex col justify-content-end"></p> -->
-
-
-
-                <hr>
                 <div class="row">
-                    <div class="col">
-                        <!-- <button id="addlbtn" class=" btn btn-outline-primary btn-sm">Add Lesson</button> -->
-                        <?php
-                        if (empty($_SESSION['lesson_add_open'])) {
-                            // isset($_GET['addlesson']) || isset($_GET['edit']) ||
+                    <h3 class="col">Class TimeTable</h3>
 
-                        ?>
-                            <a id="addlbtn" href="../process/process.php?addlesson" type="hidden" class="btn btn-outline-primary btn-sm">Add Lesson</a>
-                        <?php } ?>
-                    </div>
+
 
                     <div class="d-flex col justify-content-end">
 
                         <div class="dropdown" style="margin-right:5px; margin-bottom: 5px;">
-                            <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <!-- dropdown header-->
                                 <?php
                                 if (empty($_SESSION['lcourse'])) {
@@ -169,18 +158,23 @@ $_SESSION['page'] = '../lesson/lesson.php';
                                 if (!empty($lesson_course)) {
                                     while ($row = $lesson_course->fetch_assoc()) {  ?>
 
-                                        <a class="dropdown-item" href="../process/process.php?select_course=<?php echo $row['course_name']; ?>"><?php echo $row['course_name'] ?></a>
-                                    <?php }
+                                <a class="dropdown-item"
+                                    href="../process/process.php?select_course=<?php echo $row['course_name']; ?>&course_id=<?php echo $row['id']; ?>"><?php echo $row['course_name'] ?></a>
+                                <?php }
                                 } else {
                                     ?>
-                                    <a class="dropdown-item disabled" href="#">No available Courses</a>
+                                <a class="dropdown-item disabled" href="#">No available Courses</a>
                                 <?php
+                                    $ure = $db->query("select from units where course=" + $_GET['course_id']) or die($db->error);
+                                    alert("");
                                 } ?>
                             </div>
                         </div>
+
                         <!-- button select year -->
                         <div class="dropdown" style="margin-right:5px; margin-bottom: 5px;">
-                            <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <?php if (empty($_SESSION['lcourse']) || empty($_SESSION['year'])) {
                                     echo "Select year";
                                 } else {
@@ -206,7 +200,8 @@ $_SESSION['page'] = '../lesson/lesson.php';
                             </div>
                         </div>
                         <div class="dropdown" style=" margin-bottom: 5px;">
-                            <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <?php if (empty($_SESSION['semester']) || empty($_SESSION['lcourse']) || empty($_SESSION['year'])) {
                                     echo "Select sem";
                                 } else {
@@ -230,27 +225,40 @@ $_SESSION['page'] = '../lesson/lesson.php';
                         </div>
                     </div>
                 </div>
-                <hr>
 
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <?php
+                        if (empty($_SESSION['lesson_add_open'])) {
+                            // isset($_GET['addlesson']) || isset($_GET['edit']) ||
+
+                        ?>
+                        <a id="addlbtn" href="../process/process.php?addlesson" type="hidden"
+                            class="btn btn-outline-primary btn-sm">Add Lesson</a>
+                        <?php } ?>
+                    </div>
+                    <!-- <button id="addlbtn" class=" btn btn-outline-primary btn-sm">Add Lesson</button> -->
+
+                </div>
+                <hr>
 
                 <div class="row">
 
                     <?php
                     if (!empty($_SESSION['lesson_add_open']) && $_SESSION['lesson_add_open']) {
                         // isset($_GET['addlesson']) || isset($_GET['edit']) ||
-
                     ?>
-                        <div class="col">
-                            <?php
+                    <div class="col-sm-6">
+                        <?php
                             include 'addlesson.php';
                             ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <?php include 'roomsavail.php' ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <?php include 'lecturer_available.php' ?>
-                        </div>
+                    </div>
+                    <div class="col-sm-6" id="side_view">
+                        <?php
+                            include 'lecturer_available.php';
+                            ?>
+                    </div>
                     <?php
                     }
                     ?>
@@ -258,7 +266,6 @@ $_SESSION['page'] = '../lesson/lesson.php';
                 <!-- input end -->
 
                 <!-- hide and unhide add lesson button -->
-
 
                 <!-- buttton select course and year -->
 
@@ -271,7 +278,11 @@ $_SESSION['page'] = '../lesson/lesson.php';
                 <?php
                 if (!empty($_SESSION['lesson_add_open']) && ($_SESSION['lesson_add_open'])) {
                 } else {
-                    include "table_lesson.php";
+                    if (isset($_GET['printlesson'])) {
+                        include "print_table.php";
+                    } else {
+                        include "table_lesson.php";
+                    }
                 }
                 ?>
 
@@ -282,6 +293,7 @@ $_SESSION['page'] = '../lesson/lesson.php';
         </div>
 
     </div>
+
 
     <div class="search_result d-flex col">
         <div class="result row"></div>
@@ -297,36 +309,94 @@ $_SESSION['page'] = '../lesson/lesson.php';
     <script type="text/javascript" src="../js/script.js"> </script>
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('.searching .col .search-box input[type="text"]').on("keyup input", function() {
-                /* Get input value on change */
-                var inputVal = $(this).val();
-                var resultDropdown = $('.result');
-                // $(this).siblings(".result");
-                var availdep = $(this).siblings(".dep_avail");
-                if (inputVal.length) {
-                    $.post("../process/process.php", {
-                        dep_search: inputVal
-                    }).done(function(data) {
-                        // Display the returned data in browser
-                        resultDropdown.html(data);
-                        availdep.text("");
-                    });
-                } else {
-                    resultDropdown.empty();
-                }
-            });
-
-            // Set search input value on click of result item
-            $(document).on("click", ".result a", function() {
-                $(".searching .col .search-box").find('input[type="text"]').val($(this).text());
-                $(this).parents(".result").empty();
-            });
+    $(document).ready(function() {
+        $('.searching .col .search-box input[type="text"]').on("keyup input", function() {
+            /* Get input value on change */
+            var inputVal = $(this).val();
+            var resultDropdown = $('.result');
+            // $(this).siblings(".result");
+            var availdep = $(this).siblings(".dep_avail");
+            if (inputVal.length) {
+                $.post("../process/process.php", {
+                    dep_search: inputVal
+                }).done(function(data) {
+                    // Display the returned data in browser
+                    resultDropdown.html(data);
+                    availdep.text("");
+                });
+            } else {
+                resultDropdown.empty();
+            }
         });
+
+        // Set search input value on click of result item
+        $(document).on("click", ".result a", function() {
+            $(".searching .col .search-box").find('input[type="text"]').val($(this).text());
+            $(this).parents(".result").empty();
+        });
+    });
     </script>
 
 
+    <script>
+    function changeFunc(id) {
+        // var id = $(this).data('id');
+        // alert(id);
+        swal({
+                title: "Confirm to delete",
+                text: "info cannot be recovered once deleted",
+                type: "info",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            },
+            // function() {
+            // $.ajax({
+            //     method: "GET",
+            //     url: '../process/process.php',
+            //     data: 'delete=' + id,
+            //     dataType: 'json',
+            //     beforeSend : () => {
 
+            //     },
+            //     success: function(data) {
+            //         swal("Ajax request finished!");
+
+            //     }
+            //     ,complete: () => {
+
+            //     },
+            //     error : ()=>{
+            //         alert("an error occoured")
+            //     }
+            // });
+
+            function() {
+                setTimeout(function() {
+                    $.ajax({
+                        method: "GET",
+                        url: '../process/process.php',
+                        data: 'delete=' + id,
+                        dataType: 'json',
+                        beforeSend: () => {
+
+                        },
+                        success: function(data) {
+                            swal("Ajax request finished!");
+
+                        },
+                        complete: () => {
+                            window.location.href = "../lesson/lesson.php";
+                        },
+                        error: () => {
+
+                        }
+                    });
+                    swal("Ajax request finished!");
+                }, 2000);
+            });
+    }
+    </script>
     <!-- 
 
     <script type="text/javascript">
@@ -365,52 +435,139 @@ $_SESSION['page'] = '../lesson/lesson.php';
     </script> -->
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#form_lesson').click(function() {
-                var name = $('#name').val();
-                var manager = $('#manager').val();
-                var address = $('#address').val();
-                var phone = $('#phone').val();
+    $(document).ready(function() {
+        $('#form_lesson').click(function() {
+            var name = $('#name').val();
+            var manager = $('#manager').val();
+            var address = $('#address').val();
+            var phone = $('#phone').val();
 
 
-                // alert(brands);
-                $.ajax({
-                    url: "add_warehouse.php",
-                    type: "POST",
-                    data: {
-                        name: name,
-                        manager: manager,
-                        address: address,
-                        phone: phone
-                    },
-                    dataType: "JSON",
-                    success: function(data) {
-                        $('.add_new_warehouse').modal('hide');
-
-                    }
-                });
-
-                $('#warehouse_form').trigger('reset');
-            });
-
-            setInterval(function() {
-                $('#table_content').load('fetch_warehouse.php');
-            }, 200);
-        });
-
-
-        $(document).on('click', '#delete_warehouse', function() {
-            var ids = $(this).data('id');
-            // alert(ids);
+            // alert(brands);
             $.ajax({
-                url: "delete_warehouse.php",
-                type: "post",
-                data: "warehouse_id=" + ids,
+                url: "add_warehouse.php",
+                type: "POST",
+                data: {
+                    name: name,
+                    manager: manager,
+                    address: address,
+                    phone: phone
+                },
+                dataType: "JSON",
                 success: function(data) {
-                    $('.delete_warehouse').modal('hide');
+                    $('.add_new_warehouse').modal('hide');
+
                 }
             });
+
+            $('#warehouse_form').trigger('reset');
         });
+
+        setInterval(function() {
+            $('#table_content').load('fetch_warehouse.php');
+        }, 200);
+    });
+
+
+    $(document).on('click', '#delete_warehouse', function() {
+        var ids = $(this).data('id');
+        // alert(ids);
+        $.ajax({
+            url: "delete_warehouse.php",
+            type: "post",
+            data: "warehouse_id=" + ids,
+            success: function(data) {
+                $('.delete_warehouse').modal('hide');
+            }
+        });
+    });
+    </script>
+
+    <script>
+    // function myFunction() {
+    //     // Declare variables
+    //     var input, filter, table, tr, td, i, j, txtValue, selected_value, td_count
+    //     input = document.getElementById("search_lessons");
+    //     filter = input.value.toUpperCase();
+    //     // table = document.getElementById("prtable_lessons");
+    //     // tr = table.getElementsByTagName("tr");
+    //     // selected_value = document.getElementById("select_filter").value;
+    //     // Loop through all table rows, and hide those who don't match the search query
+    //     for (i = 0; i < tr.length; i++) {
+    //         for (j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+    //             td = tr[i].getElementsByTagName("td")[j];
+    //             // td = tr[i].getElementById("td-department")[0];
+    //             if (td) {
+    //                 txtValue = td.textContent || td.innerText;
+    //                 // alert(txtValue);
+    //                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //                     tr[i].getElementsByTagName("td")[j].style.display = "";
+    //                 } else {
+    //                     tr[i].getElementsByTagName("td")[j].style.display = "none";
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    function lecmyFunction() {
+        document.getElementById("lecDropdown").classList.toggle("show");
+    }
+
+    function filterFunctionlec() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("myInputlec");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("lecDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
+    }
+
+    function filterFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("myDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
+    }
+
+    function onchangefilter(filtervalue) {
+        var selected_value = document.getElementById("select_filter").value; //column
+        if (selected_value == "room") {
+            document.getElementById("select_filter_lecturer").style.display = "none";
+            document.getElementById("select_filter_room").style.display = "block";
+
+
+        } else if (selected_value == "lecturer") {
+            document.getElementById("select_filter_lecturer").style.display = "block";
+            document.getElementById("select_filter_room").style.display = "none";
+        }
+    }
+
+    function filterselected(id) {
+        var selected_value = document.getElementById("select_filter").value; //column
+
+        location.href = 'print_schooltimetable.php?filter_value=' + id + "&col_value=" + selected_value;
+    }
     </script>
 </body>
 
